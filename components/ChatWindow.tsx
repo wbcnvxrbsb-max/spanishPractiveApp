@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import MessageBubble from "./MessageBubble";
 import MessageInput from "./MessageInput";
-import VoiceButton from "./VoiceButton";
 import ScenarioSelector from "./ScenarioSelector";
-import AudioControls from "./AudioControls";
+import SettingsMenu from "./SettingsMenu";
 import CompletionModal from "./CompletionModal";
-import { Scenario, ComplexityLevel, WordCount } from "@/lib/prompts";
+import LevelPopup from "./LevelPopup";
+import { Scenario, ComplexityLevel, WordCount, TargetLanguage, scenarioVariations } from "@/lib/prompts";
 import { Language, t } from "@/lib/translations";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 
@@ -24,32 +24,41 @@ export default function ChatWindow() {
   const [scenario, setScenario] = useState<Scenario>("free_chat");
   const [isLoading, setIsLoading] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const [useTyping, setUseTyping] = useState(false);
   const [complexity, setComplexity] = useState<ComplexityLevel>(2);
   const [wordCount, setWordCount] = useState<WordCount>("medium");
-  const [lang, setLang] = useState<Language>("es");
+  const [lang, setLang] = useState<Language>("en");
+  const [targetLang, setTargetLang] = useState<TargetLanguage>("es");
+  const [hideText, setHideText] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
+  const [showLevelPopup, setShowLevelPopup] = useState(false);
+  const [scenarioVariation, setScenarioVariation] = useState<string | null>(null);
+  const [conversationVoice, setConversationVoice] = useState<"feminine" | "masculine">("feminine");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastMessageIdRef = useRef<string | null>(null);
 
   const {
     speak,
     stop,
+    unlockAudio,
     isSpeaking,
     isSupported: ttsSupported,
     rate,
     setRate,
     currentMessageId,
-  } = useSpeechSynthesis();
+  } = useSpeechSynthesis(targetLang);
 
   // Load preferences from localStorage
   useEffect(() => {
     const savedComplexity = localStorage.getItem("complexity");
     const savedWordCount = localStorage.getItem("wordCount");
     const savedLang = localStorage.getItem("uiLanguage");
+    const savedTargetLang = localStorage.getItem("targetLanguage");
+    const savedHideText = localStorage.getItem("hideText");
     if (savedComplexity) setComplexity(parseInt(savedComplexity) as ComplexityLevel);
     if (savedWordCount) setWordCount(savedWordCount as WordCount);
     if (savedLang) setLang(savedLang as Language);
+    if (savedTargetLang) setTargetLang(savedTargetLang as TargetLanguage);
+    if (savedHideText) setHideText(savedHideText === "true");
   }, []);
 
   // Save preferences
@@ -64,6 +73,14 @@ export default function ChatWindow() {
   useEffect(() => {
     localStorage.setItem("uiLanguage", lang);
   }, [lang]);
+
+  useEffect(() => {
+    localStorage.setItem("targetLanguage", targetLang);
+  }, [targetLang]);
+
+  useEffect(() => {
+    localStorage.setItem("hideText", hideText.toString());
+  }, [hideText]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -82,10 +99,10 @@ export default function ChatWindow() {
         lastMessage.id !== lastMessageIdRef.current
       ) {
         lastMessageIdRef.current = lastMessage.id;
-        speak(lastMessage.content, lastMessage.id);
+        speak(lastMessage.content, lastMessage.id, conversationVoice);
       }
     }
-  }, [messages, ttsSupported, speak]);
+  }, [messages, ttsSupported, speak, conversationVoice]);
 
   const generateId = () => Math.random().toString(36).substring(2, 9);
 
@@ -94,17 +111,32 @@ export default function ChatWindow() {
       if (isSpeaking && currentMessageId === messageId) {
         stop();
       } else {
-        speak(text, messageId);
+        speak(text, messageId, conversationVoice);
       }
     },
-    [isSpeaking, currentMessageId, speak, stop]
+    [isSpeaking, currentMessageId, speak, stop, conversationVoice]
   );
 
   const toggleLanguage = () => {
-    setLang((prev) => (prev === "es" ? "en" : "es"));
+    setLang((prev) => {
+      if (prev === "en") return "es";
+      if (prev === "es") return "pt";
+      return "en";
+    });
   };
 
-  // Check if message contains completion marker and strip it
+  const handleTargetLangChange = (newTargetLang: TargetLanguage) => {
+    setTargetLang(newTargetLang);
+    // Reset conversation when changing learning language
+    if (isStarted) {
+      stop();
+      setMessages([]);
+      setIsStarted(false);
+      lastMessageIdRef.current = null;
+      setScenarioVariation(null);
+    }
+  };
+
   const processAIResponse = (content: string): { text: string; isComplete: boolean } => {
     const isComplete = content.includes(COMPLETION_MARKER);
     const text = content.replace(COMPLETION_MARKER, "").trim();
@@ -116,23 +148,39 @@ export default function ChatWindow() {
     setMessages([]);
     setIsStarted(false);
     lastMessageIdRef.current = null;
+    setScenarioVariation(null);
     stop();
   };
 
   const startConversation = async () => {
+    // Unlock audio playback on user interaction
+    unlockAudio();
+
     setIsStarted(true);
     setIsLoading(true);
+    setShowLevelPopup(true);
     stop();
+
+    // Select persona and voice for this conversation
+    const variations = scenarioVariations[scenario];
+    const selectedVariation = variations[Math.floor(Math.random() * variations.length)];
+    const selectedVoice = Math.random() < 0.5 ? "feminine" : "masculine" as const;
+    setScenarioVariation(selectedVariation);
+    setConversationVoice(selectedVoice);
+
+    const greeting = targetLang === "pt" ? "Olá!" : "¡Hola!";
 
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [{ role: "user", content: "¡Hola!" }],
+          messages: [{ role: "user", content: greeting }],
           scenario,
           complexity,
           wordCount,
+          targetLang,
+          scenarioVariation: selectedVariation,
         }),
       });
 
@@ -147,7 +195,7 @@ export default function ChatWindow() {
       const userMsg: Message = {
         id: generateId(),
         role: "user",
-        content: "¡Hola!",
+        content: greeting,
       };
       const assistantMsg: Message = {
         id: generateId(),
@@ -181,6 +229,7 @@ export default function ChatWindow() {
       setMessages([]);
       setIsStarted(false);
       lastMessageIdRef.current = null;
+      setScenarioVariation(null);
     }
   };
 
@@ -207,6 +256,8 @@ export default function ChatWindow() {
           scenario,
           complexity,
           wordCount,
+          targetLang,
+          scenarioVariation,
         }),
       });
 
@@ -226,7 +277,6 @@ export default function ChatWindow() {
 
       setMessages([...newMessages, assistantMsg]);
 
-      // Show completion modal after a short delay to let the message display
       if (isComplete) {
         setTimeout(() => setShowCompletion(true), 1500);
       }
@@ -252,23 +302,36 @@ export default function ChatWindow() {
         <CompletionModal onClose={handleCompletion} lang={lang} />
       )}
 
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 shadow-md relative">
-        <h1 className="text-xl font-bold text-center">{t("title", lang)}</h1>
-        <p className="text-xs text-blue-100 text-center mt-1">
-          {t("subtitle", lang)}
-        </p>
+      {/* Compact Header */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-2 shadow-md flex items-center justify-between">
+        <h1 className="text-base font-bold">{t(targetLang === "pt" ? "titlePt" : "title", lang)}</h1>
 
-        {/* Language Toggle - Top Right */}
-        <button
-          onClick={toggleLanguage}
-          className="absolute top-3 right-3 px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-full text-xs font-medium transition-colors flex items-center gap-1"
-        >
-          {lang === "es" ? "🇪🇸 ES" : "🇺🇸 EN"}
-        </button>
+        {/* Right side: Settings + Language */}
+        <div className="flex items-center gap-2">
+          <SettingsMenu
+            rate={rate}
+            onRateChange={setRate}
+            complexity={complexity}
+            onComplexityChange={setComplexity}
+            wordCount={wordCount}
+            onWordCountChange={setWordCount}
+            targetLang={targetLang}
+            onTargetLangChange={handleTargetLangChange}
+            hideText={hideText}
+            onHideTextChange={setHideText}
+            isSupported={ttsSupported}
+            lang={lang}
+          />
+          <button
+            onClick={toggleLanguage}
+            className="px-2 py-1 bg-white/20 hover:bg-white/30 rounded-full text-xs font-medium transition-colors"
+          >
+            {lang === "pt" ? "🇧🇷 PT" : lang === "es" ? "🇪🇸 ES" : "🇺🇸 EN"}
+          </button>
+        </div>
       </div>
 
-      {/* Scenario Selector */}
+      {/* Scenario Selector - Inline */}
       <ScenarioSelector
         selected={scenario}
         onChange={handleScenarioChange}
@@ -276,36 +339,21 @@ export default function ChatWindow() {
         lang={lang}
       />
 
-      {/* Audio & Difficulty Controls */}
-      <AudioControls
-        rate={rate}
-        onRateChange={setRate}
-        complexity={complexity}
-        onComplexityChange={setComplexity}
-        wordCount={wordCount}
-        onWordCountChange={setWordCount}
-        isSupported={ttsSupported}
-        lang={lang}
-      />
-
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 chat-messages">
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4 chat-messages">
         {!isStarted ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
-            <div className="bg-white rounded-2xl shadow-sm p-8 max-w-md">
-              <div className="text-5xl mb-4">🇪🇸</div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+            <div className="bg-white rounded-2xl shadow-sm p-6 max-w-sm">
+              <div className="text-4xl mb-3">{targetLang === "pt" ? "🇧🇷" : "🇪🇸"}</div>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 {t("welcome", lang)}
               </h2>
               <p className="text-gray-600 mb-4 text-sm">
-                {t("welcomeText", lang)}
-              </p>
-              <p className="text-gray-500 mb-6 text-xs">
-                {t("adjustLevel", lang)}
+                {t(targetLang === "pt" ? "welcomeTextPt" : "welcomeText", lang)}
               </p>
               <button
                 onClick={startConversation}
-                className="px-8 py-3 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                className="px-6 py-2.5 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm"
               >
                 {t("startConversation", lang)}
               </button>
@@ -322,11 +370,13 @@ export default function ChatWindow() {
                 onSpeak={ttsSupported ? handleSpeak : undefined}
                 isSpeaking={isSpeaking}
                 isCurrentlySpeaking={currentMessageId === msg.id}
+                lang={lang}
+                hideText={hideText}
               />
             ))}
             {isLoading && (
               <div className="flex justify-start mb-3">
-                <div className="bg-white text-gray-800 px-4 py-3 rounded-2xl rounded-bl-md shadow-sm border border-gray-100">
+                <div className="ml-10 bg-white text-gray-800 px-4 py-2.5 rounded-2xl rounded-bl-md shadow-sm border border-gray-100">
                   <div className="flex gap-1">
                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
                     <span
@@ -346,26 +396,9 @@ export default function ChatWindow() {
         )}
       </div>
 
-      {/* Input Area - Voice First or Typing */}
+      {/* Input Area - Always visible when started */}
       {isStarted && (
-        useTyping ? (
-          <div>
-            <MessageInput onSend={sendMessage} disabled={isLoading} lang={lang} />
-            <button
-              onClick={() => setUseTyping(false)}
-              className="w-full py-2 text-xs text-gray-400 hover:text-gray-600 bg-gray-50 border-t"
-            >
-              🎤 {t("switchToVoice", lang)}
-            </button>
-          </div>
-        ) : (
-          <VoiceButton
-            onTranscript={sendMessage}
-            disabled={isLoading}
-            onTypingMode={() => setUseTyping(true)}
-            lang={lang}
-          />
-        )
+        <MessageInput onSend={sendMessage} disabled={isLoading} lang={lang} targetLang={targetLang} />
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import Groq from "groq-sdk";
-import { getSystemPrompt, Scenario, ComplexityLevel, WordCount } from "@/lib/prompts";
+import { getSystemPrompt, Scenario, ComplexityLevel, WordCount, TargetLanguage } from "@/lib/prompts";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -7,7 +7,7 @@ const groq = new Groq({
 
 export async function POST(request: Request) {
   try {
-    const { messages, scenario, complexity, wordCount } = await request.json();
+    const { messages, scenario, complexity, wordCount, targetLang, scenarioVariation } = await request.json();
 
     if (!process.env.GROQ_API_KEY) {
       return Response.json(
@@ -19,7 +19,9 @@ export async function POST(request: Request) {
     const systemPrompt = getSystemPrompt(
       scenario as Scenario || "free_chat",
       (complexity as ComplexityLevel) || 3,
-      (wordCount as WordCount) || "medium"
+      (wordCount as WordCount) || "medium",
+      (targetLang as TargetLanguage) || "es",
+      scenarioVariation
     );
 
     // Format messages for Groq (OpenAI-compatible format)
@@ -31,6 +33,7 @@ export async function POST(request: Request) {
     const response = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       max_tokens: 1024,
+      temperature: 0.3,
       messages: [
         { role: "system", content: systemPrompt },
         ...groqMessages,
