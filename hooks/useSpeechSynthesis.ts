@@ -5,6 +5,12 @@ import { useState, useEffect, useCallback, useRef } from "react";
 type TargetLanguage = "es" | "pt";
 type Voice = "feminine" | "masculine";
 
+// ElevenLabs voice IDs
+const VOICES = {
+  feminine: "EXAVITQu4vr4xnSDxMaL", // Sarah
+  masculine: "TX3LPaxmHKxFdv7VOQHJ", // Liam
+};
+
 let globalVoiceIndex = 0;
 
 export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
@@ -58,25 +64,42 @@ export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
     async (text: string, messageId?: string, voiceOverride?: Voice) => {
       if (!text) return;
 
+      // Get API key from localStorage
+      const apiKey = localStorage.getItem("elevenlabs_key");
+      if (!apiKey) {
+        console.error("No ElevenLabs API key found in localStorage");
+        return;
+      }
+
       cleanupAudio();
 
       const voice = voiceOverride || getNextVoice();
+      const voiceId = voice === "masculine" ? VOICES.masculine : VOICES.feminine;
 
       setIsSpeaking(true);
       setCurrentMessageId(messageId || null);
 
       try {
-        const response = await fetch("/api/tts", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            text,
-            voice,
-            speed: rate,
-          }),
-        });
+        // Call ElevenLabs API directly from browser
+        const response = await fetch(
+          `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+          {
+            method: "POST",
+            headers: {
+              "xi-api-key": apiKey,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              text,
+              model_id: "eleven_multilingual_v2",
+              voice_settings: {
+                stability: 0.5,
+                similarity_boost: 0.75,
+                speed: Math.max(0.5, Math.min(1.0, rate)),
+              },
+            }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("TTS request failed");

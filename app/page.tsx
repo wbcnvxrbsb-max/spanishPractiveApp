@@ -1,9 +1,9 @@
-import ChatWindow from "@/components/ChatWindow";
+import AppWrapper from "@/components/AppWrapper";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <ChatWindow />
+      <AppWrapper />
     </main>
   );
 }
