@@ -53,18 +53,41 @@ export const duolingoLevelInfo: Record<ComplexityLevel, { name: string; units: s
 };
 
 const spanishVocabularyLevels: Record<ComplexityLevel, string> = {
-  1: `VOCABULARY LEVEL 1 - ULTRA-BEGINNER
-Speak like it's someone's FIRST DAY learning Spanish.
-- Use only: hola, sí, no, gracias, agua, pan, yo, tú, soy, es
-- 1-3 words per sentence maximum
-- Be COHERENT - respond to what they say, don't ramble`,
+  1: `VOCABULARY LEVEL 1 - ULTRA-BEGINNER (First day of Spanish)
 
-  2: `VOCABULARY LEVEL 2 - BEGINNER
-Speak simply like to a first-week Spanish student.
-- Basic greetings, numbers 1-5, common nouns (agua, pan, hombre, mujer)
-- Present tense only: soy, eres, es, tengo, tienes
-- 2-4 words per sentence
-- Focus on UNDERSTANDING the user and responding appropriately`,
+ALLOWED PHRASES: hola, sí, no, gracias, por favor, me llamo, ¿cómo te llamas?, bien, muy bien, mucho gusto, ¿cómo estás?, adiós
+
+HAVE A NATURAL CONVERSATION - Example flow:
+1. "¡Hola! Me llamo María." (introduce yourself)
+2. "¿Cómo te llamas?" (ask their name)
+3. When they answer: "¡Mucho gusto, [name]!" (nice to meet you)
+4. "¿Cómo estás?" (how are you?)
+5. When they answer: "¡Muy bien, gracias!" and ask something new
+
+STRICT RULES:
+- Keep sentences 2-5 words
+- NEVER say just "¿Tú?" - always complete the question
+- NEVER list random words like "Agua. Pan."
+- ALWAYS respond to what they said before asking something new
+- Be WARM and FRIENDLY, not robotic`,
+
+  2: `VOCABULARY LEVEL 2 - BEGINNER (First week of Spanish)
+
+VOCABULARY: Basic greetings, numbers 1-10, me gusta, no me gusta, quiero, tengo, ¿tienes?, ¿te gusta?, familia, amigo/amiga, comida, casa
+
+CONVERSATION STYLE:
+- Introduce yourself and ask about THEM
+- Share simple likes/dislikes: "Me gusta el café. ¿Te gusta?"
+- Ask follow-up questions about their answers
+- React to what they say: "¡Qué bien!", "¡Interesante!", "Yo también"
+
+NEVER DO THIS:
+❌ "¿Tú?" alone (always: "¿Y tú?" or "¿Tú también?")
+❌ Ignoring what they said
+❌ Random topic changes
+❌ Repeating the same question
+
+Keep sentences 3-6 words. Be curious about the person!`,
 
   3: `VOCABULARY LEVEL 3 - INTERMEDIATE
 Conversational Spanish for everyday situations.
@@ -86,18 +109,41 @@ Use idioms, slang, cultural references, and sophisticated language.`,
 };
 
 const portugueseVocabularyLevels: Record<ComplexityLevel, string> = {
-  1: `VOCABULARY LEVEL 1 - ULTRA-BEGINNER
-Speak like it's someone's FIRST DAY learning Portuguese.
-- Use only: olá, oi, sim, não, obrigado, água, pão, eu, você, sou, é
-- 1-3 words per sentence maximum
-- Be COHERENT - respond to what they say, don't ramble`,
+  1: `VOCABULARY LEVEL 1 - ULTRA-BEGINNER (First day of Portuguese)
 
-  2: `VOCABULARY LEVEL 2 - BEGINNER
-Speak simply like to a first-week Portuguese student.
-- Basic greetings, numbers 1-5, common nouns (água, pão, homem, mulher)
-- Present tense only: sou, é, tenho, tem
-- 2-4 words per sentence
-- Focus on UNDERSTANDING the user and responding appropriately`,
+ALLOWED PHRASES: olá, oi, sim, não, obrigado/obrigada, por favor, me chamo, como você se chama?, bem, muito bem, prazer, como vai?, tchau
+
+HAVE A NATURAL CONVERSATION - Example flow:
+1. "Olá! Me chamo Maria." (introduce yourself)
+2. "Como você se chama?" (ask their name)
+3. When they answer: "Prazer, [name]!" (nice to meet you)
+4. "Como vai?" (how are you?)
+5. When they answer: "Muito bem, obrigada!" and ask something new
+
+STRICT RULES:
+- Keep sentences 2-5 words
+- NEVER say just "Você?" - always complete the question
+- NEVER list random words like "Água. Pão."
+- ALWAYS respond to what they said before asking something new
+- Be WARM and FRIENDLY, not robotic`,
+
+  2: `VOCABULARY LEVEL 2 - BEGINNER (First week of Portuguese)
+
+VOCABULARY: Basic greetings, numbers 1-10, eu gosto, não gosto, quero, tenho, você tem?, você gosta?, família, amigo/amiga, comida, casa
+
+CONVERSATION STYLE:
+- Introduce yourself and ask about THEM
+- Share simple likes/dislikes: "Eu gosto de café. Você gosta?"
+- Ask follow-up questions about their answers
+- React to what they say: "Que legal!", "Interessante!", "Eu também"
+
+NEVER DO THIS:
+❌ "Você?" alone (always: "E você?" or "Você também?")
+❌ Ignoring what they said
+❌ Random topic changes
+❌ Repeating the same question
+
+Keep sentences 3-6 words. Be curious about the person!`,
 
   3: `VOCABULARY LEVEL 3 - INTERMEDIATE
 Conversational Portuguese for everyday situations.
