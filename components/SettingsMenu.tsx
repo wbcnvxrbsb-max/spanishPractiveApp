@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { signOut } from "next-auth/react";
 import { ComplexityLevel, WordCount, TargetLanguage } from "@/lib/prompts";
 import { Language, t } from "@/lib/translations";
 
@@ -174,7 +175,7 @@ export default function SettingsMenu({
           </div>
 
           {/* Hide Text Toggle */}
-          <div>
+          <div className="mb-4">
             <label className="text-xs font-medium text-gray-600 block mb-2">
               👁️ {t("hideText", lang)}
             </label>
@@ -200,6 +201,16 @@ export default function SettingsMenu({
                 {lang === "pt" ? "Ocultar" : lang === "es" ? "Ocultar" : "Hide"}
               </button>
             </div>
+          </div>
+
+          {/* Sign Out */}
+          <div className="pt-3 border-t border-gray-200">
+            <button
+              onClick={() => signOut()}
+              className="w-full py-2 text-xs font-medium text-red-600 hover:bg-red-50 rounded-md transition-colors"
+            >
+              {lang === "pt" ? "Sair da conta" : lang === "es" ? "Cerrar sesión" : "Sign Out"}
+            </button>
           </div>
         </div>
       )}

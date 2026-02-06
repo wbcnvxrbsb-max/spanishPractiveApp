@@ -60,7 +60,7 @@ export function useSpeechRecognition(targetLang: TargetLanguage = "es") {
           // Create form data for ElevenLabs
           const formData = new FormData();
           formData.append("file", audioBlob, "recording.webm");
-          formData.append("model_id", "scribe_v1");
+          formData.append("model_id", "scribe_v2");
           formData.append("language_code", languageCode);
 
           // Call ElevenLabs STT API directly from browser

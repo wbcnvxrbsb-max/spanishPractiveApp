@@ -28,6 +28,7 @@ export default function RegisterScreen({ onBack, onSuccess, lang = "en" }: Regis
       passwordMismatch: "Passwords do not match",
       passwordTooShort: "Password must be at least 6 characters",
       success: "Account created! Please sign in.",
+      permissionNotice: "This app uses your microphone for speech recognition and plays audio responses. You'll be asked to allow microphone access when you start practicing.",
     },
     es: {
       title: "Crear Cuenta",
@@ -40,6 +41,7 @@ export default function RegisterScreen({ onBack, onSuccess, lang = "en" }: Regis
       passwordMismatch: "Las contraseñas no coinciden",
       passwordTooShort: "La contraseña debe tener al menos 6 caracteres",
       success: "¡Cuenta creada! Por favor inicia sesión.",
+      permissionNotice: "Esta app usa tu micrófono para reconocimiento de voz y reproduce respuestas de audio. Se te pedirá permitir el acceso al micrófono cuando empieces a practicar.",
     },
     pt: {
       title: "Criar Conta",
@@ -52,6 +54,7 @@ export default function RegisterScreen({ onBack, onSuccess, lang = "en" }: Regis
       passwordMismatch: "As senhas não coincidem",
       passwordTooShort: "A senha deve ter pelo menos 6 caracteres",
       success: "Conta criada! Por favor, faça login.",
+      permissionNotice: "Este app usa seu microfone para reconhecimento de fala e reproduz respostas de áudio. Você será solicitado a permitir o acesso ao microfone quando começar a praticar.",
     },
   };
 
@@ -97,7 +100,14 @@ export default function RegisterScreen({ onBack, onSuccess, lang = "en" }: Regis
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">{t.title}</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">{t.title}</h1>
+
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+          <div className="flex items-start gap-2">
+            <span className="text-lg flex-shrink-0">🎤🔊</span>
+            <p className="text-sm text-blue-800">{t.permissionNotice}</p>
+          </div>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

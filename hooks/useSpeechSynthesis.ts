@@ -13,6 +13,9 @@ const VOICES = {
 
 let globalVoiceIndex = 0;
 
+// Persistent AudioContext to keep audio unlocked after user interaction
+let audioContext: AudioContext | null = null;
+
 export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSupported] = useState(true);
@@ -20,6 +23,7 @@ export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
   const [currentMessageId, setCurrentMessageId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const blobUrlRef = useRef<string | null>(null);
+  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -37,6 +41,14 @@ export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
   }, [rate]);
 
   const cleanupAudio = useCallback(() => {
+    if (sourceNodeRef.current) {
+      try {
+        sourceNodeRef.current.stop();
+      } catch {
+        // Already stopped
+      }
+      sourceNodeRef.current = null;
+    }
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = "";
@@ -48,10 +60,14 @@ export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
     }
   }, []);
 
-  // Unlock audio playback by playing a silent audio (call on user click)
+  // Unlock audio playback by creating/resuming AudioContext (call on user click)
   const unlockAudio = useCallback(() => {
-    const audio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=");
-    audio.play().catch(() => {});
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    }
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
   }, []);
 
   const getNextVoice = useCallback((): Voice => {
@@ -106,25 +122,30 @@ export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
         }
 
         const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        blobUrlRef.current = audioUrl;
+        const arrayBuffer = await audioBlob.arrayBuffer();
 
-        const audio = new Audio(audioUrl);
-        audioRef.current = audio;
+        // Ensure AudioContext exists and is running
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+        }
+        if (audioContext.state === "suspended") {
+          await audioContext.resume();
+        }
 
-        audio.onended = () => {
+        // Decode and play through AudioContext
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        const sourceNode = audioContext.createBufferSource();
+        sourceNode.buffer = audioBuffer;
+        sourceNode.connect(audioContext.destination);
+        sourceNodeRef.current = sourceNode;
+
+        sourceNode.onended = () => {
           setIsSpeaking(false);
           setCurrentMessageId(null);
-          cleanupAudio();
+          sourceNodeRef.current = null;
         };
 
-        audio.onerror = () => {
-          setIsSpeaking(false);
-          setCurrentMessageId(null);
-          cleanupAudio();
-        };
-
-        await audio.play();
+        sourceNode.start(0);
       } catch (error) {
         console.error("TTS error:", error);
         setIsSpeaking(false);
