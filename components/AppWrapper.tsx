@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import LoginScreen from "./LoginScreen";
+import RegisterScreen from "./RegisterScreen";
 import ApiKeySetup from "./ApiKeySetup";
 import ChatWindow from "./ChatWindow";
 
@@ -10,6 +11,7 @@ export default function AppWrapper() {
   const { data: session, status } = useSession();
   const [hasApiKey, setHasApiKey] = useState<boolean | null>(null);
   const [lang, setLang] = useState<"en" | "es" | "pt">("en");
+  const [showRegister, setShowRegister] = useState(false);
 
   // Check for API key on mount and when session changes
   useEffect(() => {
@@ -25,9 +27,6 @@ export default function AppWrapper() {
     }
   }, [session]);
 
-  // Debug logging - remove after fixing
-  console.log("Auth status:", status, "Session:", !!session, "HasApiKey:", hasApiKey);
-
   // Show loading while checking auth
   if (status === "loading" || hasApiKey === null) {
     return (
@@ -37,9 +36,25 @@ export default function AppWrapper() {
     );
   }
 
-  // Not logged in - show login screen (explicit status check)
+  // Not logged in
   if (status === "unauthenticated" || !session) {
-    return <LoginScreen lang={lang} />;
+    // Show registration screen
+    if (showRegister) {
+      return (
+        <RegisterScreen
+          lang={lang}
+          onBack={() => setShowRegister(false)}
+          onSuccess={() => setShowRegister(false)}
+        />
+      );
+    }
+    // Show login screen
+    return (
+      <LoginScreen
+        lang={lang}
+        onRegister={() => setShowRegister(true)}
+      />
+    );
   }
 
   // Logged in but no API key - show setup
@@ -58,5 +73,10 @@ export default function AppWrapper() {
   }
 
   // Fallback to login screen for any unexpected state
-  return <LoginScreen lang={lang} />;
+  return (
+    <LoginScreen
+      lang={lang}
+      onRegister={() => setShowRegister(true)}
+    />
+  );
 }

@@ -1,42 +1,92 @@
 "use client";
 
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 
 interface LoginScreenProps {
   lang?: "en" | "es" | "pt";
+  onRegister: () => void;
 }
 
-export default function LoginScreen({ lang = "en" }: LoginScreenProps) {
+export default function LoginScreen({ lang = "en", onRegister }: LoginScreenProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const text = {
     en: {
       title: "Language Practice",
       subtitle: "Practice Spanish or Portuguese conversation with AI",
-      signIn: "Sign in with Google",
-      description: "Sign in to access the conversation practice app.",
+      signInGoogle: "Sign in with Google",
+      or: "or",
+      email: "Email",
+      password: "Password",
+      signIn: "Sign In",
+      noAccount: "Don't have an account?",
+      register: "Create one",
+      invalidCredentials: "Invalid email or password",
     },
     es: {
       title: "Práctica de Idiomas",
       subtitle: "Practica conversación en español o portugués con IA",
-      signIn: "Iniciar sesión con Google",
-      description: "Inicia sesión para acceder a la app de práctica.",
+      signInGoogle: "Iniciar sesión con Google",
+      or: "o",
+      email: "Correo electrónico",
+      password: "Contraseña",
+      signIn: "Iniciar Sesión",
+      noAccount: "¿No tienes cuenta?",
+      register: "Crear una",
+      invalidCredentials: "Correo o contraseña inválidos",
     },
     pt: {
       title: "Prática de Idiomas",
       subtitle: "Pratique conversação em espanhol ou português com IA",
-      signIn: "Entrar com Google",
-      description: "Entre para acessar o app de prática de conversação.",
+      signInGoogle: "Entrar com Google",
+      or: "ou",
+      email: "E-mail",
+      password: "Senha",
+      signIn: "Entrar",
+      noAccount: "Não tem conta?",
+      register: "Criar uma",
+      invalidCredentials: "E-mail ou senha inválidos",
     },
   };
 
   const t = text[lang];
 
+  const handleEmailSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(t.invalidCredentials);
+      }
+    } catch {
+      setError(t.invalidCredentials);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
-        <div className="text-5xl mb-4">🗣️</div>
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">{t.title}</h1>
-        <p className="text-gray-600 mb-6">{t.subtitle}</p>
+      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
+        <div className="text-center mb-6">
+          <div className="text-5xl mb-4">🗣️</div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">{t.title}</h1>
+          <p className="text-gray-600">{t.subtitle}</p>
+        </div>
 
+        {/* Google Sign In */}
         <button
           onClick={() => signIn("google")}
           className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white border-2 border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
@@ -59,10 +109,69 @@ export default function LoginScreen({ lang = "en" }: LoginScreenProps) {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          {t.signIn}
+          {t.signInGoogle}
         </button>
 
-        <p className="text-sm text-gray-500 mt-6">{t.description}</p>
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-1 border-t border-gray-300"></div>
+          <span className="px-4 text-gray-500 text-sm">{t.or}</span>
+          <div className="flex-1 border-t border-gray-300"></div>
+        </div>
+
+        {/* Email/Password Form */}
+        <form onSubmit={handleEmailSignIn} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              {t.email}
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              {t.password}
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          {error && (
+            <p className="text-red-500 text-sm">{error}</p>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isLoading ? "..." : t.signIn}
+          </button>
+        </form>
+
+        {/* Register Link */}
+        <p className="text-center mt-6 text-sm text-gray-600">
+          {t.noAccount}{" "}
+          <button
+            onClick={onRegister}
+            className="text-blue-500 hover:text-blue-600 font-medium"
+          >
+            {t.register}
+          </button>
+        </p>
       </div>
     </div>
   );
