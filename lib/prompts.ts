@@ -585,10 +585,10 @@ ANTI-REPETITION:
 - Move the conversation FORWARD
 - Ask follow-up questions about what the USER said
 
-RESPONSE LENGTH: ${wordCountInstructions[wordCount]}
-
 SCENARIO (adapt to your vocabulary level - simplify if needed):
 The scenario below gives you a character. But if you are at Level 1-5, IGNORE complex details and just have a simple friendly conversation using allowed vocabulary.
+
+RESPONSE LENGTH: ${wordCountInstructions[wordCount]}
 
 LANGUAGE:
 - Respond in ${langName} only
