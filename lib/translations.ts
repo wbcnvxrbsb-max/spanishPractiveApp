@@ -60,6 +60,20 @@ export const translations = {
     translate: "Traducir",
     hideText: "Ocultar Texto",
     translating: "Traduciendo...",
+
+    // Scenario names and descriptions
+    scenario_free_chat: "Conversación Libre",
+    scenario_free_chat_desc: "Habla de lo que quieras",
+    scenario_restaurant: "En el Restaurante",
+    scenario_restaurant_desc: "Practica pidiendo comida y bebidas",
+    scenario_directions: "Pidiendo Direcciones",
+    scenario_directions_desc: "Pide y da direcciones",
+    scenario_shopping: "De Compras",
+    scenario_shopping_desc: "Compra y negocia en mercados",
+    scenario_making_friends: "Haciendo Amigos",
+    scenario_making_friends_desc: "Conoce gente nueva y haz amigos",
+    scenario_travel: "Viajando",
+    scenario_travel_desc: "Situaciones de viaje: aeropuerto, hotel, tours",
   },
   en: {
     // Header
@@ -119,6 +133,20 @@ export const translations = {
     translate: "Translate",
     hideText: "Hide Text",
     translating: "Translating...",
+
+    // Scenario names and descriptions
+    scenario_free_chat: "Free Chat",
+    scenario_free_chat_desc: "Chat about anything you'd like",
+    scenario_restaurant: "At the Restaurant",
+    scenario_restaurant_desc: "Practice ordering food and drinks",
+    scenario_directions: "Asking for Directions",
+    scenario_directions_desc: "Ask for and give directions",
+    scenario_shopping: "Shopping",
+    scenario_shopping_desc: "Shop and bargain at markets",
+    scenario_making_friends: "Making Friends",
+    scenario_making_friends_desc: "Meet new people and make friends",
+    scenario_travel: "Traveling",
+    scenario_travel_desc: "Travel situations: airport, hotel, tours",
   },
   pt: {
     // Header
@@ -178,6 +206,20 @@ export const translations = {
     translate: "Traduzir",
     hideText: "Ocultar Texto",
     translating: "Traduzindo...",
+
+    // Scenario names and descriptions
+    scenario_free_chat: "Conversa Livre",
+    scenario_free_chat_desc: "Converse sobre o que quiser",
+    scenario_restaurant: "No Restaurante",
+    scenario_restaurant_desc: "Pratique pedindo comida e bebidas",
+    scenario_directions: "Pedindo Direções",
+    scenario_directions_desc: "Peça e dê direções",
+    scenario_shopping: "Fazendo Compras",
+    scenario_shopping_desc: "Compre e negocie em mercados",
+    scenario_making_friends: "Fazendo Amigos",
+    scenario_making_friends_desc: "Conheça pessoas novas e faça amigos",
+    scenario_travel: "Viajando",
+    scenario_travel_desc: "Situações de viagem: aeroporto, hotel, passeios",
   },
 };
 
