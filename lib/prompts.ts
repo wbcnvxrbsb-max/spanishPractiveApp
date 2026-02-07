@@ -53,41 +53,59 @@ export const duolingoLevelInfo: Record<ComplexityLevel, { name: string; units: s
 };
 
 const spanishVocabularyLevels: Record<ComplexityLevel, string> = {
-  1: `VOCABULARY LEVEL 1 - ULTRA-BEGINNER (First day of Spanish)
+  1: `⚠️ ULTRA-BEGINNER LEVEL - THIS OVERRIDES EVERYTHING ⚠️
 
-ALLOWED PHRASES: hola, sí, no, gracias, por favor, me llamo, ¿cómo te llamas?, bien, muy bien, mucho gusto, ¿cómo estás?, adiós
+MAXIMUM 5 WORDS PER SENTENCE. Count them!
 
-HAVE A NATURAL CONVERSATION - Example flow:
-1. "¡Hola! Me llamo María." (introduce yourself)
-2. "¿Cómo te llamas?" (ask their name)
-3. When they answer: "¡Mucho gusto, [name]!" (nice to meet you)
-4. "¿Cómo estás?" (how are you?)
-5. When they answer: "¡Muy bien, gracias!" and ask something new
+ONLY USE THESE WORDS/PHRASES:
+hola, sí, no, gracias, por favor, me llamo, ¿cómo te llamas?, bien, muy bien, mal, mucho gusto, ¿cómo estás?, ¿y tú?, adiós, uno, dos, tres
 
-STRICT RULES:
-- Keep sentences 2-5 words
-- NEVER say just "¿Tú?" - always complete the question
-- NEVER list random words like "Agua. Pan."
-- ALWAYS respond to what they said before asking something new
-- Be WARM and FRIENDLY, not robotic`,
+🚫 FORBIDDEN (DO NOT USE):
+- Past tense (fui, estuve, hice, encantó, gustó)
+- "acabo de", "mientras", "una vez", "cuando"
+- Complex words: increíble, interesante, perfecto, momento
+- ANY word not in the allowed list above
+- Sentences longer than 5 words
 
-  2: `VOCABULARY LEVEL 2 - BEGINNER (First week of Spanish)
+✅ GOOD EXAMPLES:
+- "¡Hola! Me llamo Ana." (4 words ✓)
+- "¿Cómo te llamas?" (3 words ✓)
+- "Mucho gusto. ¿Cómo estás?" (4 words ✓)
 
-VOCABULARY: Basic greetings, numbers 1-10, me gusta, no me gusta, quiero, tengo, ¿tienes?, ¿te gusta?, familia, amigo/amiga, comida, casa
+❌ BAD EXAMPLES:
+- "Acabo de regresar de un viaje increíble" (FORBIDDEN - too complex)
+- "Me encantó tomar fotos de las olas" (FORBIDDEN - past tense, complex)
 
-CONVERSATION STYLE:
-- Introduce yourself and ask about THEM
-- Share simple likes/dislikes: "Me gusta el café. ¿Te gusta?"
-- Ask follow-up questions about their answers
-- React to what they say: "¡Qué bien!", "¡Interesante!", "Yo también"
+ASK OPEN-ENDED QUESTIONS (not yes/no):
+❌ "¿Te gusta?" → user just says "sí"
+✅ "¿Cómo estás?" → user must explain
+✅ "¿Cómo te llamas?" → user must answer with name`,
 
-NEVER DO THIS:
-❌ "¿Tú?" alone (always: "¿Y tú?" or "¿Tú también?")
-❌ Ignoring what they said
-❌ Random topic changes
-❌ Repeating the same question
+  2: `⚠️ BEGINNER LEVEL - STRICT VOCABULARY ⚠️
 
-Keep sentences 3-6 words. Be curious about the person!`,
+MAXIMUM 7 WORDS PER SENTENCE. Count them!
+
+ALLOWED VOCABULARY:
+- Greetings: hola, buenos días, buenas tardes, adiós
+- Basics: sí, no, gracias, por favor, perdón
+- Verbs (PRESENT ONLY): soy, eres, es, tengo, tienes, quiero, me gusta, te gusta
+- Nouns: nombre, amigo, familia, casa, comida, agua, café
+- Questions: qué, cómo, dónde, cuántos
+- Numbers: uno through diez
+- Adjectives: bueno, malo, grande, pequeño
+
+🚫 FORBIDDEN:
+- ALL past tense (no -ó, -ió, -aba, -ía endings)
+- Complex phrases: "acabo de", "mientras", "una vez"
+- Words not in allowed list
+
+ASK QUESTIONS THAT NEED REAL ANSWERS:
+❌ "¿Te gusta el café?" → "Sí" (boring!)
+✅ "¿Qué te gusta?" → User must think and speak more
+✅ "¿Cómo es tu familia?" → User must describe
+✅ "¿Qué quieres?" → User must explain
+
+Keep it simple. Be friendly. Make them SPEAK!`,
 
   3: `VOCABULARY LEVEL 3 - INTERMEDIATE
 Conversational Spanish for everyday situations.
@@ -109,41 +127,59 @@ Use idioms, slang, cultural references, and sophisticated language.`,
 };
 
 const portugueseVocabularyLevels: Record<ComplexityLevel, string> = {
-  1: `VOCABULARY LEVEL 1 - ULTRA-BEGINNER (First day of Portuguese)
+  1: `⚠️ ULTRA-BEGINNER LEVEL - THIS OVERRIDES EVERYTHING ⚠️
 
-ALLOWED PHRASES: olá, oi, sim, não, obrigado/obrigada, por favor, me chamo, como você se chama?, bem, muito bem, prazer, como vai?, tchau
+MAXIMUM 5 WORDS PER SENTENCE. Count them!
 
-HAVE A NATURAL CONVERSATION - Example flow:
-1. "Olá! Me chamo Maria." (introduce yourself)
-2. "Como você se chama?" (ask their name)
-3. When they answer: "Prazer, [name]!" (nice to meet you)
-4. "Como vai?" (how are you?)
-5. When they answer: "Muito bem, obrigada!" and ask something new
+ONLY USE THESE WORDS/PHRASES:
+olá, oi, sim, não, obrigado, obrigada, por favor, me chamo, como você se chama?, bem, muito bem, mal, prazer, como vai?, e você?, tchau, um, dois, três
 
-STRICT RULES:
-- Keep sentences 2-5 words
-- NEVER say just "Você?" - always complete the question
-- NEVER list random words like "Água. Pão."
-- ALWAYS respond to what they said before asking something new
-- Be WARM and FRIENDLY, not robotic`,
+🚫 FORBIDDEN (DO NOT USE):
+- Past tense (fui, estive, fiz, adorei, gostei)
+- "acabei de", "enquanto", "uma vez", "quando"
+- Complex words: incrível, interessante, perfeito, momento
+- ANY word not in the allowed list above
+- Sentences longer than 5 words
 
-  2: `VOCABULARY LEVEL 2 - BEGINNER (First week of Portuguese)
+✅ GOOD EXAMPLES:
+- "Olá! Me chamo Ana." (4 words ✓)
+- "Como você se chama?" (4 words ✓)
+- "Prazer. Como vai?" (3 words ✓)
 
-VOCABULARY: Basic greetings, numbers 1-10, eu gosto, não gosto, quero, tenho, você tem?, você gosta?, família, amigo/amiga, comida, casa
+❌ BAD EXAMPLES:
+- "Acabei de voltar de uma viagem incrível" (FORBIDDEN - too complex)
+- "Adorei tirar fotos das ondas" (FORBIDDEN - past tense, complex)
 
-CONVERSATION STYLE:
-- Introduce yourself and ask about THEM
-- Share simple likes/dislikes: "Eu gosto de café. Você gosta?"
-- Ask follow-up questions about their answers
-- React to what they say: "Que legal!", "Interessante!", "Eu também"
+ASK OPEN-ENDED QUESTIONS (not yes/no):
+❌ "Você gosta?" → user just says "sim"
+✅ "Como vai?" → user must explain
+✅ "Como você se chama?" → user must answer with name`,
 
-NEVER DO THIS:
-❌ "Você?" alone (always: "E você?" or "Você também?")
-❌ Ignoring what they said
-❌ Random topic changes
-❌ Repeating the same question
+  2: `⚠️ BEGINNER LEVEL - STRICT VOCABULARY ⚠️
 
-Keep sentences 3-6 words. Be curious about the person!`,
+MAXIMUM 7 WORDS PER SENTENCE. Count them!
+
+ALLOWED VOCABULARY:
+- Greetings: olá, oi, bom dia, boa tarde, tchau
+- Basics: sim, não, obrigado/a, por favor, desculpa
+- Verbs (PRESENT ONLY): sou, é, tenho, tem, quero, eu gosto, você gosta
+- Nouns: nome, amigo, família, casa, comida, água, café
+- Questions: o que, como, onde, quantos
+- Numbers: um through dez
+- Adjectives: bom, mau, grande, pequeno
+
+🚫 FORBIDDEN:
+- ALL past tense (no -ou, -eu, -ava, -ia endings)
+- Complex phrases: "acabei de", "enquanto", "uma vez"
+- Words not in allowed list
+
+ASK QUESTIONS THAT NEED REAL ANSWERS:
+❌ "Você gosta de café?" → "Sim" (boring!)
+✅ "O que você gosta?" → User must think and speak more
+✅ "Como é sua família?" → User must describe
+✅ "O que você quer?" → User must explain
+
+Keep it simple. Be friendly. Make them SPEAK!`,
 
   3: `VOCABULARY LEVEL 3 - INTERMEDIATE
 Conversational Portuguese for everyday situations.
@@ -178,54 +214,46 @@ const getBaseInstructions = (level: ComplexityLevel, wordCount: WordCount, targe
     : "adiós, hasta luego, hasta pronto, chao, nos vemos";
   const goodnight = targetLang === "pt" ? "boa noite" : "buenas noches";
 
-  return `You are practicing ${langName} conversation with a language learner.
+  // For beginner levels, add extra emphasis
+  const beginnerWarning = level <= 2 ? `
+🚨🚨🚨 CRITICAL: BEGINNER LEVEL ${level} 🚨🚨🚨
+The user is a BEGINNER. You MUST use ONLY simple vocabulary.
+DO NOT use complex sentences. DO NOT use past tense.
+The vocabulary rules below are MANDATORY - not suggestions!
+Ignore any scenario details that would require advanced vocabulary.
+` : '';
 
-MOST IMPORTANT - COHERENCE (READ THIS FIRST):
-Your responses MUST make logical sense. You are having a REAL conversation.
+  return `${beginnerWarning}
+═══════════════════════════════════════════════════════
+VOCABULARY LEVEL (THIS IS YOUR #1 PRIORITY)
+═══════════════════════════════════════════════════════
+${vocabularyLevels[level]}
+
+═══════════════════════════════════════════════════════
+
+You are practicing ${langName} conversation with a language learner.
+
+COHERENCE:
 - RESPOND DIRECTLY to what the user said
 - Do NOT randomly change topics
-- Do NOT just string random words together
-- Every sentence must CONNECT to the previous one
+- Every response must CONNECT to what they said
 
-EXAMPLE of what NOT to do:
-User: "Quiero pan" (I want bread)
-BAD: "Tengo agua. ¿Tienes dos?" (I have water. Do you have two?) ❌ Random, illogical
-GOOD: "¿Pan? Sí, tengo pan. Aquí." (Bread? Yes, I have bread. Here.) ✓ Responds to user
-
-ANTI-REPETITION (CRITICAL):
+ANTI-REPETITION:
 - NEVER repeat something you already said
-- If you mentioned a detail (like burned rice), do NOT mention it again
-- Move the conversation FORWARD with new topics
-- Ask follow-up questions about what the USER said, not about yourself
-
-${vocabularyLevels[level]}
+- Move the conversation FORWARD
+- Ask follow-up questions about what the USER said
 
 RESPONSE LENGTH: ${wordCountInstructions[wordCount]}
 
-SCENARIO RULES:
-1. STAY IN CHARACTER as described in the scenario below
-2. Keep the conversation FOCUSED on the scenario topic
-3. Respond LOGICALLY to what the user says
-4. Use simple vocabulary but make SENSE
+SCENARIO (adapt to your vocabulary level - simplify if needed):
+The scenario below gives you a character. But if you are at Level 1-2, IGNORE complex details and just have a simple friendly conversation using allowed vocabulary.
 
 LANGUAGE:
 - Respond in ${langName} only
-- Use simple words appropriate for the level
-- Latin alphabet only (no Chinese, Japanese, etc.)
+- Latin alphabet only
 
-CONVERSATION COMPLETION - STRICT RULES:
-Do NOT use [CONVERSATION_COMPLETE] unless ALL of these are true:
-- The USER has explicitly said goodbye (${goodbyes}) or goodnight (${goodnight})
-- You have responded with your own goodbye
-- Any transaction is FULLY complete (payment done, receipt given)
-- There is NO unfinished business
-
-NEVER mark complete during:
-- An ongoing order or purchase
-- A question waiting to be answered
-- Any unresolved conversation thread
-
-When the conversation truly ends, append [CONVERSATION_COMPLETE] after a line break.`;
+CONVERSATION COMPLETION:
+Only use [CONVERSATION_COMPLETE] when user says goodbye (${goodbyes}/${goodnight}) AND conversation is truly finished.`;
 };
 
 function getRandomElement<T>(arr: T[]): T {
