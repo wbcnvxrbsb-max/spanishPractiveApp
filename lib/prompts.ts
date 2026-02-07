@@ -6,7 +6,7 @@ export type Scenario =
   | "making_friends"
   | "travel";
 
-export type ComplexityLevel = 1 | 2 | 3 | 4 | 5;
+export type ComplexityLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export type WordCount = "short" | "medium" | "long";
 export type TargetLanguage = "es" | "pt";
 
@@ -45,159 +45,470 @@ export const scenarios: { id: Scenario; name: string; description: string }[] = 
 
 // Duolingo level mappings for reference
 export const duolingoLevelInfo: Record<ComplexityLevel, { name: string; units: string; description: string }> = {
-  1: { name: "Ultra-Principiante", units: "Day 1", description: "First Words" },
-  2: { name: "Principiante", units: "Units 1-2", description: "Intro & Greetings" },
-  3: { name: "Básico-Intermedio", units: "Units 3-10", description: "Basics & Travel" },
-  4: { name: "Avanzado", units: "Units 11-20", description: "Opinions & Subjunctive" },
-  5: { name: "Experto", units: "Units 21+", description: "Native-like" },
+  1: { name: "Primeras Palabras", units: "Day 1", description: "First Words" },
+  2: { name: "Presentaciones", units: "Day 2-3", description: "Introductions" },
+  3: { name: "Preguntas Básicas", units: "Week 1", description: "Basic Questions" },
+  4: { name: "Gustos y Deseos", units: "Unit 1", description: "Wants & Likes" },
+  5: { name: "Vida Diaria", units: "Unit 2", description: "Daily Life" },
+  6: { name: "Pasado y Viajes", units: "Units 3-5", description: "Past & Travel" },
+  7: { name: "Sentimientos", units: "Units 6-8", description: "Feelings & Opinions" },
+  8: { name: "Conversación Compleja", units: "Units 9-12", description: "Complex Conversation" },
+  9: { name: "Expresión Avanzada", units: "Units 13-20", description: "Advanced Expression" },
+  10: { name: "Nativo", units: "Units 21+", description: "Native-like" },
 };
 
 const spanishVocabularyLevels: Record<ComplexityLevel, string> = {
-  1: `⚠️ ULTRA-BEGINNER LEVEL - THIS OVERRIDES EVERYTHING ⚠️
+  1: `⚠️ LEVEL 1: FIRST WORDS - THIS OVERRIDES EVERYTHING ⚠️
+
+MAXIMUM 4 WORDS PER SENTENCE. Count them!
+
+ONLY USE THESE WORDS/PHRASES:
+hola, sí, no, gracias, por favor, adiós, bien, mal, ¿cómo estás?, ¿y tú?
+
+🚫 FORBIDDEN (DO NOT USE):
+- ALL verbs (no soy, tengo, quiero, me llamo, etc.)
+- ALL nouns (no nombre, amigo, casa, etc.)
+- Past tense of any kind
+- Numbers
+- ANY word not in the allowed list above
+- Sentences longer than 4 words
+
+✅ GOOD EXAMPLES:
+- "¡Hola! ¿Cómo estás?" (3 words ✓)
+- "Bien, gracias. ¿Y tú?" (4 words ✓)
+- "Adiós." (1 word ✓)
+
+❌ BAD EXAMPLES:
+- "Me llamo Ana" (FORBIDDEN - "me llamo" not at this level)
+- "Tengo tres amigos" (FORBIDDEN - verbs/nouns/numbers not at this level)
+
+ASK OPEN-ENDED QUESTIONS using only allowed phrases:
+✅ "¿Cómo estás?" → user must explain
+✅ "¿Y tú?" → user must respond`,
+
+  2: `⚠️ LEVEL 2: INTRODUCTIONS - STRICT VOCABULARY ⚠️
 
 MAXIMUM 5 WORDS PER SENTENCE. Count them!
 
 ONLY USE THESE WORDS/PHRASES:
-hola, sí, no, gracias, por favor, me llamo, ¿cómo te llamas?, bien, muy bien, mal, mucho gusto, ¿cómo estás?, ¿y tú?, adiós, uno, dos, tres
+Everything from Level 1: hola, sí, no, gracias, por favor, adiós, bien, mal, ¿cómo estás?, ¿y tú?
+NEW at this level: me llamo, ¿cómo te llamas?, mucho gusto, muy bien, uno, dos, tres, señor, señora, perdón
 
 🚫 FORBIDDEN (DO NOT USE):
-- Past tense (fui, estuve, hice, encantó, gustó)
-- "acabo de", "mientras", "una vez", "cuando"
-- Complex words: increíble, interesante, perfecto, momento
+- Conjugated verbs other than "me llamo" (no soy, tengo, quiero, etc.)
+- Complex nouns (no casa, comida, familia, etc.)
+- Past tense of any kind
+- Numbers above tres
 - ANY word not in the allowed list above
 - Sentences longer than 5 words
 
 ✅ GOOD EXAMPLES:
 - "¡Hola! Me llamo Ana." (4 words ✓)
 - "¿Cómo te llamas?" (3 words ✓)
-- "Mucho gusto. ¿Cómo estás?" (4 words ✓)
+- "Mucho gusto, señora." (3 words ✓)
 
 ❌ BAD EXAMPLES:
-- "Acabo de regresar de un viaje increíble" (FORBIDDEN - too complex)
-- "Me encantó tomar fotos de las olas" (FORBIDDEN - past tense, complex)
+- "Soy de México" (FORBIDDEN - "soy" not at this level)
+- "Tengo dos amigos" (FORBIDDEN - "tengo" and "amigos" not at this level)
 
-ASK OPEN-ENDED QUESTIONS (not yes/no):
-❌ "¿Te gusta?" → user just says "sí"
-✅ "¿Cómo estás?" → user must explain
-✅ "¿Cómo te llamas?" → user must answer with name`,
+ASK QUESTIONS THAT NEED REAL ANSWERS:
+✅ "¿Cómo te llamas?" → user must answer with name
+✅ "¿Cómo estás?" → user must explain`,
 
-  2: `⚠️ BEGINNER LEVEL - STRICT VOCABULARY ⚠️
+  3: `⚠️ LEVEL 3: BASIC QUESTIONS - STRICT VOCABULARY ⚠️
+
+MAXIMUM 6 WORDS PER SENTENCE. Count them!
+
+ALLOWED VOCABULARY:
+All from Levels 1-2, PLUS:
+- Question words: ¿qué?, ¿cómo?, ¿dónde?, ¿cuántos?
+- Verbs (PRESENT ONLY): soy, eres, es, tengo, tienes
+- Numbers: cuatro, cinco, seis, siete, ocho, nueve, diez
+- Nouns: nombre
+
+🚫 FORBIDDEN:
+- Verbs not listed (no quiero, me gusta, hablar, etc.)
+- Past tense of any kind
+- Complex nouns (no familia, comida, trabajo, etc.)
+- ANY word not in the allowed vocabulary
+- Sentences longer than 6 words
+
+✅ GOOD EXAMPLES:
+- "¿Dónde eres?" (2 words ✓)
+- "Soy Ana. Tengo cinco." (4 words ✓)
+- "¿Cuántos?" (1 word ✓)
+
+❌ BAD EXAMPLES:
+- "Me gusta el café" (FORBIDDEN - "gusta" and "café" not at this level)
+- "Quiero agua por favor" (FORBIDDEN - "quiero" and "agua" not at this level)
+
+ASK QUESTIONS USING QUESTION WORDS:
+✅ "¿Qué es?" → user must explain
+✅ "¿Dónde eres?" → user must answer
+✅ "¿Cuántos?" → user must count`,
+
+  4: `⚠️ LEVEL 4: WANTS & LIKES - STRICT VOCABULARY ⚠️
 
 MAXIMUM 7 WORDS PER SENTENCE. Count them!
 
 ALLOWED VOCABULARY:
-- Greetings: hola, buenos días, buenas tardes, adiós
-- Basics: sí, no, gracias, por favor, perdón
-- Verbs (PRESENT ONLY): soy, eres, es, tengo, tienes, quiero, me gusta, te gusta
-- Nouns: nombre, amigo, familia, casa, comida, agua, café
-- Questions: qué, cómo, dónde, cuántos
-- Numbers: uno through diez
+All from Levels 1-3, PLUS:
+- Verbs (PRESENT ONLY): quiero, me gusta, te gusta
+- Nouns: amigo, amiga, familia, casa, comida, agua, café
 - Adjectives: bueno, malo, grande, pequeño
+- Others: también, mucho, poco
 
 🚫 FORBIDDEN:
-- ALL past tense (no -ó, -ió, -aba, -ía endings)
-- Complex phrases: "acabo de", "mientras", "una vez"
-- Words not in allowed list
+- Verbs not listed (no hablar, comer, vivir, trabajar, etc.)
+- ALL past tense
+- Travel/complex vocabulary
+- ANY word not in the allowed vocabulary
+- Sentences longer than 7 words
+
+✅ GOOD EXAMPLES:
+- "¿Qué te gusta?" (3 words ✓)
+- "Me gusta el café mucho." (5 words ✓)
+- "¿Cómo es tu familia?" (4 words ✓)
+
+❌ BAD EXAMPLES:
+- "Trabajo en una escuela grande" (FORBIDDEN - "trabajo" and "escuela" not at this level)
+- "Ayer comí en un restaurante" (FORBIDDEN - past tense, complex vocabulary)
 
 ASK QUESTIONS THAT NEED REAL ANSWERS:
-❌ "¿Te gusta el café?" → "Sí" (boring!)
-✅ "¿Qué te gusta?" → User must think and speak more
-✅ "¿Cómo es tu familia?" → User must describe
-✅ "¿Qué quieres?" → User must explain
+✅ "¿Qué te gusta?" → user must think and speak
+✅ "¿Cómo es tu casa?" → user must describe
+✅ "¿Qué quieres?" → user must explain`,
 
-Keep it simple. Be friendly. Make them SPEAK!`,
+  5: `⚠️ LEVEL 5: DAILY LIFE - STRICT VOCABULARY ⚠️
 
-  3: `VOCABULARY LEVEL 3 - INTERMEDIATE
-Conversational Spanish for everyday situations.
-- Present and past tense, common verbs
-- Travel, food, family vocabulary
-- Sentences of 4-8 words
-- Have natural back-and-forth conversation`,
+MAXIMUM 8 WORDS PER SENTENCE. Count them!
 
-  4: `VOCABULARY LEVEL 4 - ADVANCED
-More complex Spanish with opinions and nuance.
-- Subjunctive, conditional tenses
-- Express opinions, emotions, hypotheticals
-- Longer, complex sentences
-- Engage in deeper conversation`,
+ALLOWED VOCABULARY:
+All from Levels 1-4, PLUS:
+- Verbs (PRESENT ONLY): hablar, comer, vivir, trabajar, estudiar, necesitar, ir, estar
+- Nouns: trabajo, escuela, ciudad, país, tiempo, día, noche, mañana, libro, música
+- Time words: hoy, ahora, siempre
+- Connectors: pero, y, o, con
+- Greetings: buenos días, buenas tardes, buenas noches
 
-  5: `VOCABULARY LEVEL 5 - NATIVE-LIKE
+🚫 FORBIDDEN:
+- ALL past tense (no -é, -ó, -ió, -aba, -ía endings)
+- Subjunctive, conditional
+- Complex vocabulary (emotions, opinions, travel details)
+- Sentences longer than 8 words
+
+✅ GOOD EXAMPLES:
+- "¿Dónde trabajas?" (2 words ✓)
+- "Estudio español, pero es difícil." (5 words ✓)
+- "Hoy como con mi familia." (5 words ✓)
+
+ASK ABOUT DAILY LIFE:
+✅ "¿Dónde vives?" → user must describe
+✅ "¿Qué estudias?" → user must explain
+✅ "¿Qué haces hoy?" → user must tell about their day`,
+
+  6: `LEVEL 6: PAST & TRAVEL
+Past tense is now unlocked! Conversational Spanish for travel and food situations.
+
+ALLOWED:
+- Present tense and SIMPLE PAST (preterite) tense
+- All vocabulary from previous levels, PLUS:
+- Travel: hotel, aeropuerto, tren, autobús, calle, plaza, playa, montaña, viaje, maleta, pasaporte, boleto
+- Food: restaurante, menú, carne, pollo, pescado, arroz, pan, fruta, cerveza, vino, cuenta, propina
+- Descriptions: bonito, feo, caro, barato, lejos, cerca, nuevo, viejo, caliente, frío
+- Common past forms: fui, fue, tuve, hice, comí, hablé, viajé, visité, llegué, compré
+- Maximum 10 words per sentence
+
+🚫 STILL FORBIDDEN:
+- Imperfect tense (no -aba, -ía)
+- Subjunctive, conditional
+- Complex opinion/emotion vocabulary
+- Sentences longer than 10 words
+
+Have natural back-and-forth conversation about travel and experiences.
+Ask about their trips, food preferences, and plans.`,
+
+  7: `LEVEL 7: FEELINGS & OPINIONS
+Express emotions, give opinions, use comparisons.
+
+ALLOWED (in addition to all previous levels):
+- Imperfect past tense: era, tenía, vivía, quería, hacía
+- Emotions: feliz, triste, enojado, nervioso, cansado, emocionado, preocupado, contento, aburrido, sorprendido
+- Opinions: creo que, pienso que, en mi opinión, me parece
+- Comparatives: más...que, menos...que, mejor, peor, tan...como
+- Connectors: porque, cuando, si, entonces, además
+- Maximum 12 words per sentence
+
+🚫 STILL FORBIDDEN:
+- Conditional tense
+- Subjunctive mood
+- Sentences longer than 12 words
+
+Engage in conversations about feelings, memories, and opinions.
+Ask "why" questions to draw out opinions.`,
+
+  8: `LEVEL 8: COMPLEX CONVERSATION
+Conditional tense, hypotheticals, and nuanced discussion.
+
+ALLOWED (in addition to all previous levels):
+- Conditional: sería, tendría, podría, haría, iría, me gustaría
+- Future: voy a + infinitive, será, habrá
+- Si clauses: "Si tuviera..., haría..."
+- Abstract nouns: problema, solución, oportunidad, experiencia, diferencia, situación
+- Discourse markers: sin embargo, por otro lado, en realidad, de hecho, por ejemplo
+- Maximum 15 words per sentence
+
+🚫 STILL FORBIDDEN:
+- Full subjunctive mood (except in si-clauses)
+- Highly formal or literary register
+
+Discuss hypothetical situations, plans, and complex topics naturally.`,
+
+  9: `LEVEL 9: ADVANCED EXPRESSION
+Full subjunctive mood, formal register, persuasion and debate.
+
+ALLOWED: Nearly unrestricted vocabulary, including:
+- Present and past subjunctive
+- Formal register (usted/ustedes)
+- Persuasion: debería, hay que, es necesario, sugiero que
+- Cultural topics: política, cultura, tradición, costumbre, sociedad
+- Idiomatic expressions
+- No strict sentence length limit
+
+Engage in sophisticated discussion. Use nuanced language.
+Challenge the learner with complex topics while remaining conversational.`,
+
+  10: `LEVEL 10: NATIVE-LIKE
 No restrictions. Speak naturally as you would to a native Spanish speaker.
-Use idioms, slang, cultural references, and sophisticated language.`,
+Use idioms, slang, cultural references, sophisticated language, humor, and regional expressions.
+Speak as a native would with another native - naturally, quickly, colloquially.`,
 };
 
 const portugueseVocabularyLevels: Record<ComplexityLevel, string> = {
-  1: `⚠️ ULTRA-BEGINNER LEVEL - THIS OVERRIDES EVERYTHING ⚠️
+  1: `⚠️ LEVEL 1: FIRST WORDS - THIS OVERRIDES EVERYTHING ⚠️
+
+MAXIMUM 4 WORDS PER SENTENCE. Count them!
+
+ONLY USE THESE WORDS/PHRASES:
+olá, oi, sim, não, obrigado, obrigada, por favor, tchau, bem, mal, como vai?, e você?
+
+🚫 FORBIDDEN (DO NOT USE):
+- ALL verbs (no sou, tenho, quero, me chamo, etc.)
+- ALL nouns (no nome, amigo, casa, etc.)
+- Past tense of any kind
+- Numbers
+- ANY word not in the allowed list above
+- Sentences longer than 4 words
+
+✅ GOOD EXAMPLES:
+- "Oi! Como vai?" (3 words ✓)
+- "Bem, obrigado. E você?" (4 words ✓)
+- "Tchau." (1 word ✓)
+
+❌ BAD EXAMPLES:
+- "Me chamo Ana" (FORBIDDEN - "me chamo" not at this level)
+- "Tenho três amigos" (FORBIDDEN - verbs/nouns/numbers not at this level)
+
+ASK OPEN-ENDED QUESTIONS using only allowed phrases:
+✅ "Como vai?" → user must explain
+✅ "E você?" → user must respond`,
+
+  2: `⚠️ LEVEL 2: INTRODUCTIONS - STRICT VOCABULARY ⚠️
 
 MAXIMUM 5 WORDS PER SENTENCE. Count them!
 
 ONLY USE THESE WORDS/PHRASES:
-olá, oi, sim, não, obrigado, obrigada, por favor, me chamo, como você se chama?, bem, muito bem, mal, prazer, como vai?, e você?, tchau, um, dois, três
+Everything from Level 1: olá, oi, sim, não, obrigado, obrigada, por favor, tchau, bem, mal, como vai?, e você?
+NEW at this level: me chamo, como você se chama?, prazer, muito bem, um, dois, três, senhor, senhora, desculpa
 
 🚫 FORBIDDEN (DO NOT USE):
-- Past tense (fui, estive, fiz, adorei, gostei)
-- "acabei de", "enquanto", "uma vez", "quando"
-- Complex words: incrível, interessante, perfeito, momento
+- Conjugated verbs other than "me chamo" (no sou, tenho, quero, etc.)
+- Complex nouns (no casa, comida, família, etc.)
+- Past tense of any kind
+- Numbers above três
 - ANY word not in the allowed list above
 - Sentences longer than 5 words
 
 ✅ GOOD EXAMPLES:
 - "Olá! Me chamo Ana." (4 words ✓)
 - "Como você se chama?" (4 words ✓)
-- "Prazer. Como vai?" (3 words ✓)
+- "Prazer, senhora." (2 words ✓)
 
 ❌ BAD EXAMPLES:
-- "Acabei de voltar de uma viagem incrível" (FORBIDDEN - too complex)
-- "Adorei tirar fotos das ondas" (FORBIDDEN - past tense, complex)
+- "Sou do Brasil" (FORBIDDEN - "sou" not at this level)
+- "Tenho dois amigos" (FORBIDDEN - "tenho" and "amigos" not at this level)
 
-ASK OPEN-ENDED QUESTIONS (not yes/no):
-❌ "Você gosta?" → user just says "sim"
-✅ "Como vai?" → user must explain
-✅ "Como você se chama?" → user must answer with name`,
+ASK QUESTIONS THAT NEED REAL ANSWERS:
+✅ "Como você se chama?" → user must answer with name
+✅ "Como vai?" → user must explain`,
 
-  2: `⚠️ BEGINNER LEVEL - STRICT VOCABULARY ⚠️
+  3: `⚠️ LEVEL 3: BASIC QUESTIONS - STRICT VOCABULARY ⚠️
+
+MAXIMUM 6 WORDS PER SENTENCE. Count them!
+
+ALLOWED VOCABULARY:
+All from Levels 1-2, PLUS:
+- Question words: o que?, como?, onde?, quantos?
+- Verbs (PRESENT ONLY): sou, é, tenho, tem
+- Numbers: quatro, cinco, seis, sete, oito, nove, dez
+- Nouns: nome
+
+🚫 FORBIDDEN:
+- Verbs not listed (no quero, eu gosto, falar, etc.)
+- Past tense of any kind
+- Complex nouns (no família, comida, trabalho, etc.)
+- ANY word not in the allowed vocabulary
+- Sentences longer than 6 words
+
+✅ GOOD EXAMPLES:
+- "Onde é?" (2 words ✓)
+- "Sou Ana. Tenho cinco." (4 words ✓)
+- "Quantos?" (1 word ✓)
+
+❌ BAD EXAMPLES:
+- "Eu gosto de café" (FORBIDDEN - "gosto" and "café" not at this level)
+- "Quero água por favor" (FORBIDDEN - "quero" and "água" not at this level)
+
+ASK QUESTIONS USING QUESTION WORDS:
+✅ "O que é?" → user must explain
+✅ "Onde é?" → user must answer
+✅ "Quantos?" → user must count`,
+
+  4: `⚠️ LEVEL 4: WANTS & LIKES - STRICT VOCABULARY ⚠️
 
 MAXIMUM 7 WORDS PER SENTENCE. Count them!
 
 ALLOWED VOCABULARY:
-- Greetings: olá, oi, bom dia, boa tarde, tchau
-- Basics: sim, não, obrigado/a, por favor, desculpa
-- Verbs (PRESENT ONLY): sou, é, tenho, tem, quero, eu gosto, você gosta
-- Nouns: nome, amigo, família, casa, comida, água, café
-- Questions: o que, como, onde, quantos
-- Numbers: um through dez
+All from Levels 1-3, PLUS:
+- Verbs (PRESENT ONLY): quero, eu gosto, você gosta
+- Nouns: amigo, amiga, família, casa, comida, água, café
 - Adjectives: bom, mau, grande, pequeno
+- Others: também, muito, pouco
+
+🚫 FORBIDDEN:
+- Verbs not listed (no falar, comer, morar, trabalhar, etc.)
+- ALL past tense
+- Travel/complex vocabulary
+- ANY word not in the allowed vocabulary
+- Sentences longer than 7 words
+
+✅ GOOD EXAMPLES:
+- "O que você gosta?" (4 words ✓)
+- "Eu gosto de café muito." (5 words ✓)
+- "Como é sua família?" (4 words ✓)
+
+❌ BAD EXAMPLES:
+- "Trabalho em uma escola grande" (FORBIDDEN - "trabalho" and "escola" not at this level)
+- "Ontem comi no restaurante" (FORBIDDEN - past tense, complex vocabulary)
+
+ASK QUESTIONS THAT NEED REAL ANSWERS:
+✅ "O que você gosta?" → user must think and speak
+✅ "Como é sua casa?" → user must describe
+✅ "O que você quer?" → user must explain`,
+
+  5: `⚠️ LEVEL 5: DAILY LIFE - STRICT VOCABULARY ⚠️
+
+MAXIMUM 8 WORDS PER SENTENCE. Count them!
+
+ALLOWED VOCABULARY:
+All from Levels 1-4, PLUS:
+- Verbs (PRESENT ONLY): falar, comer, morar, trabalhar, estudar, precisar, ir, estar
+- Nouns: trabalho, escola, cidade, país, tempo, dia, noite, manhã, livro, música
+- Time words: hoje, agora, sempre
+- Connectors: mas, e, ou, com
+- Greetings: bom dia, boa tarde, boa noite
 
 🚫 FORBIDDEN:
 - ALL past tense (no -ou, -eu, -ava, -ia endings)
-- Complex phrases: "acabei de", "enquanto", "uma vez"
-- Words not in allowed list
+- Subjunctive, conditional
+- Complex vocabulary (emotions, opinions, travel details)
+- Sentences longer than 8 words
 
-ASK QUESTIONS THAT NEED REAL ANSWERS:
-❌ "Você gosta de café?" → "Sim" (boring!)
-✅ "O que você gosta?" → User must think and speak more
-✅ "Como é sua família?" → User must describe
-✅ "O que você quer?" → User must explain
+✅ GOOD EXAMPLES:
+- "Onde você mora?" (3 words ✓)
+- "Estudo português, mas é difícil." (5 words ✓)
+- "Hoje como com minha família." (5 words ✓)
 
-Keep it simple. Be friendly. Make them SPEAK!`,
+ASK ABOUT DAILY LIFE:
+✅ "Onde você mora?" → user must describe
+✅ "O que você estuda?" → user must explain
+✅ "O que você faz hoje?" → user must tell about their day`,
 
-  3: `VOCABULARY LEVEL 3 - INTERMEDIATE
-Conversational Portuguese for everyday situations.
-- Present and past tense, common verbs
-- Travel, food, family vocabulary
-- Sentences of 4-8 words
-- Have natural back-and-forth conversation`,
+  6: `LEVEL 6: PAST & TRAVEL
+Past tense is now unlocked! Conversational Portuguese for travel and food situations.
 
-  4: `VOCABULARY LEVEL 4 - ADVANCED
-More complex Portuguese with opinions and nuance.
-- Subjunctive, conditional tenses
-- Express opinions, emotions, hypotheticals
-- Longer, complex sentences
-- Engage in deeper conversation`,
+ALLOWED:
+- Present tense and SIMPLE PAST (preterite) tense
+- All vocabulary from previous levels, PLUS:
+- Travel: hotel, aeroporto, trem, ônibus, rua, praça, praia, montanha, viagem, mala, passaporte, passagem
+- Food: restaurante, cardápio, carne, frango, peixe, arroz, pão, fruta, cerveja, vinho, conta, gorjeta
+- Descriptions: bonito, feio, caro, barato, longe, perto, novo, velho, quente, frio
+- Common past forms: fui, foi, tive, fiz, comi, falei, viajei, visitei, cheguei, comprei
+- Maximum 10 words per sentence
 
-  5: `VOCABULARY LEVEL 5 - NATIVE-LIKE
+🚫 STILL FORBIDDEN:
+- Imperfect tense (no -ava, -ia)
+- Subjunctive, conditional
+- Complex opinion/emotion vocabulary
+- Sentences longer than 10 words
+
+Have natural back-and-forth conversation about travel and experiences.
+Ask about their trips, food preferences, and plans.`,
+
+  7: `LEVEL 7: FEELINGS & OPINIONS
+Express emotions, give opinions, use comparisons.
+
+ALLOWED (in addition to all previous levels):
+- Imperfect past tense: era, tinha, morava, queria, fazia
+- Emotions: feliz, triste, zangado, nervoso, cansado, animado, preocupado, contente, entediado, surpreso
+- Opinions: acho que, penso que, na minha opinião, me parece
+- Comparatives: mais...que, menos...que, melhor, pior, tão...como
+- Connectors: porque, quando, se, então, além disso
+- Maximum 12 words per sentence
+
+🚫 STILL FORBIDDEN:
+- Conditional tense
+- Subjunctive mood
+- Sentences longer than 12 words
+
+Engage in conversations about feelings, memories, and opinions.
+Ask "why" questions to draw out opinions.`,
+
+  8: `LEVEL 8: COMPLEX CONVERSATION
+Conditional tense, hypotheticals, and nuanced discussion.
+
+ALLOWED (in addition to all previous levels):
+- Conditional: seria, teria, poderia, faria, iria, eu gostaria
+- Future: vou + infinitive, será, haverá
+- Se clauses: "Se eu tivesse..., faria..."
+- Abstract nouns: problema, solução, oportunidade, experiência, diferença, situação
+- Discourse markers: no entanto, por outro lado, na verdade, de fato, por exemplo
+- Maximum 15 words per sentence
+
+🚫 STILL FORBIDDEN:
+- Full subjunctive mood (except in se-clauses)
+- Highly formal or literary register
+
+Discuss hypothetical situations, plans, and complex topics naturally.`,
+
+  9: `LEVEL 9: ADVANCED EXPRESSION
+Full subjunctive mood, formal register, persuasion and debate.
+
+ALLOWED: Nearly unrestricted vocabulary, including:
+- Present and past subjunctive
+- Formal register (senhor/senhora)
+- Persuasion: deveria, é preciso, é necessário, sugiro que
+- Cultural topics: política, cultura, tradição, costume, sociedade
+- Idiomatic expressions
+- No strict sentence length limit
+
+Engage in sophisticated discussion. Use nuanced language.
+Challenge the learner with complex topics while remaining conversational.`,
+
+  10: `LEVEL 10: NATIVE-LIKE
 No restrictions. Speak naturally as you would to a native Portuguese speaker.
-Use idioms, slang, cultural references, and sophisticated language.`,
+Use idioms, slang, cultural references, sophisticated language, humor, and regional expressions.
+Speak as a native would with another native - naturally, quickly, colloquially.`,
 };
 
 const wordCountInstructions: Record<WordCount, string> = {
@@ -214,13 +525,18 @@ const getBaseInstructions = (level: ComplexityLevel, wordCount: WordCount, targe
     : "adiós, hasta luego, hasta pronto, chao, nos vemos";
   const goodnight = targetLang === "pt" ? "boa noite" : "buenas noches";
 
-  // For beginner levels, add extra emphasis
-  const beginnerWarning = level <= 2 ? `
+  // For controlled levels (1-6), add extra emphasis
+  const beginnerWarning = level <= 5 ? `
 🚨🚨🚨 CRITICAL: BEGINNER LEVEL ${level} 🚨🚨🚨
-The user is a BEGINNER. You MUST use ONLY simple vocabulary.
+The user is a BEGINNER. You MUST use ONLY the vocabulary listed below.
 DO NOT use complex sentences. DO NOT use past tense.
 The vocabulary rules below are MANDATORY - not suggestions!
 Ignore any scenario details that would require advanced vocabulary.
+` : level === 6 ? `
+🚨 CONTROLLED LEVEL 6 🚨
+The user is still learning. Past tense is now allowed, but stick to the vocabulary guidelines below.
+The vocabulary rules below are MANDATORY - not suggestions!
+Simplify scenario details if they require vocabulary beyond this level.
 ` : '';
 
   return `${beginnerWarning}
@@ -246,7 +562,7 @@ ANTI-REPETITION:
 RESPONSE LENGTH: ${wordCountInstructions[wordCount]}
 
 SCENARIO (adapt to your vocabulary level - simplify if needed):
-The scenario below gives you a character. But if you are at Level 1-2, IGNORE complex details and just have a simple friendly conversation using allowed vocabulary.
+The scenario below gives you a character. But if you are at Level 1-5, IGNORE complex details and just have a simple friendly conversation using allowed vocabulary.
 
 LANGUAGE:
 - Respond in ${langName} only

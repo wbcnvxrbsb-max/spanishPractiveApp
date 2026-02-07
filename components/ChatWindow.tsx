@@ -54,7 +54,20 @@ export default function ChatWindow() {
     const savedLang = localStorage.getItem("uiLanguage");
     const savedTargetLang = localStorage.getItem("targetLanguage");
     const savedHideText = localStorage.getItem("hideText");
-    if (savedComplexity) setComplexity(parseInt(savedComplexity) as ComplexityLevel);
+    if (savedComplexity) {
+      const old = parseInt(savedComplexity);
+      const migrated = localStorage.getItem("levelMigratedV10");
+      if (!migrated && old >= 1 && old <= 5) {
+        // Migrate old 5-level scale to new 10-level scale
+        const mapping: Record<number, number> = { 1: 2, 2: 4, 3: 6, 4: 8, 5: 10 };
+        const newLevel = mapping[old] || old;
+        setComplexity(newLevel as ComplexityLevel);
+        localStorage.setItem("complexity", newLevel.toString());
+        localStorage.setItem("levelMigratedV10", "true");
+      } else {
+        setComplexity(old as ComplexityLevel);
+      }
+    }
     if (savedWordCount) setWordCount(savedWordCount as WordCount);
     if (savedLang) setLang(savedLang as Language);
     if (savedTargetLang) setTargetLang(savedTargetLang as TargetLanguage);

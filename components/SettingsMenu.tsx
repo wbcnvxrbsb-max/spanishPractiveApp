@@ -26,6 +26,11 @@ const levelKeys: Record<ComplexityLevel, keyof typeof import("@/lib/translations
   3: "level3",
   4: "level4",
   5: "level5",
+  6: "level6",
+  7: "level7",
+  8: "level8",
+  9: "level9",
+  10: "level10",
 };
 
 export default function SettingsMenu({
@@ -138,13 +143,13 @@ export default function SettingsMenu({
                 📚 {t("level", lang)}
               </label>
               <span className="text-xs text-gray-500">
-                {complexity}/5 {t(levelKeys[complexity], lang)}
+                {complexity}/10 {t(levelKeys[complexity], lang)}
               </span>
             </div>
             <input
               type="range"
               min="1"
-              max="5"
+              max="10"
               step="1"
               value={complexity}
               onChange={(e) => onComplexityChange(parseInt(e.target.value) as ComplexityLevel)}

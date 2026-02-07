@@ -12,29 +12,54 @@ interface LevelPopupProps {
 
 const levelInfo: Record<ComplexityLevel, { name: { en: string; es: string; pt: string }; units: string; color: string }> = {
   1: {
-    name: { en: "Ultra-Beginner", es: "Ultra-Principiante", pt: "Ultra-Iniciante" },
+    name: { en: "First Words", es: "Primeras Palabras", pt: "Primeiras Palavras" },
     units: "Day 1",
-    color: "bg-green-500"
+    color: "bg-green-400"
   },
   2: {
-    name: { en: "Beginner", es: "Principiante", pt: "Iniciante" },
-    units: "Units 1-2",
-    color: "bg-blue-500"
+    name: { en: "Introductions", es: "Presentaciones", pt: "Apresentações" },
+    units: "Day 2-3",
+    color: "bg-green-500"
   },
   3: {
-    name: { en: "Basic-Intermediate", es: "Básico-Intermedio", pt: "Básico-Intermediário" },
-    units: "Units 3-10",
-    color: "bg-yellow-500"
+    name: { en: "Basic Questions", es: "Preguntas Básicas", pt: "Perguntas Básicas" },
+    units: "Week 1",
+    color: "bg-green-600"
   },
   4: {
-    name: { en: "Advanced", es: "Avanzado", pt: "Avançado" },
-    units: "Units 11-20",
-    color: "bg-orange-500"
+    name: { en: "Wants & Likes", es: "Gustos y Deseos", pt: "Gostos e Desejos" },
+    units: "Unit 1",
+    color: "bg-blue-400"
   },
   5: {
-    name: { en: "Expert", es: "Experto", pt: "Expert" },
+    name: { en: "Daily Life", es: "Vida Diaria", pt: "Vida Diária" },
+    units: "Unit 2",
+    color: "bg-blue-500"
+  },
+  6: {
+    name: { en: "Past & Travel", es: "Pasado y Viajes", pt: "Passado e Viagens" },
+    units: "Units 3-5",
+    color: "bg-yellow-500"
+  },
+  7: {
+    name: { en: "Feelings & Opinions", es: "Sentimientos y Opiniones", pt: "Sentimentos e Opiniões" },
+    units: "Units 6-8",
+    color: "bg-orange-400"
+  },
+  8: {
+    name: { en: "Complex Conversation", es: "Conversación Compleja", pt: "Conversa Complexa" },
+    units: "Units 9-12",
+    color: "bg-orange-500"
+  },
+  9: {
+    name: { en: "Advanced Expression", es: "Expresión Avanzada", pt: "Expressão Avançada" },
+    units: "Units 13-20",
+    color: "bg-red-400"
+  },
+  10: {
+    name: { en: "Native-Like", es: "Nativo", pt: "Nativo" },
     units: "Units 21+",
-    color: "bg-red-500"
+    color: "bg-red-600"
   },
 };
 

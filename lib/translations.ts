@@ -21,11 +21,16 @@ export const translations = {
     learning: "Aprendiendo",
 
     // Level names
-    level1: "Ultra-Principiante",
-    level2: "Principiante",
-    level3: "Básico-Intermedio",
-    level4: "Avanzado",
-    level5: "Experto",
+    level1: "Primeras Palabras",
+    level2: "Presentaciones",
+    level3: "Preguntas Básicas",
+    level4: "Gustos y Deseos",
+    level5: "Vida Diaria",
+    level6: "Pasado y Viajes",
+    level7: "Sentimientos y Opiniones",
+    level8: "Conversación Compleja",
+    level9: "Expresión Avanzada",
+    level10: "Nativo",
 
     // Welcome screen
     welcome: "¡Bienvenido!",
@@ -94,11 +99,16 @@ export const translations = {
     learning: "Learning",
 
     // Level names
-    level1: "Ultra-Beginner",
-    level2: "Beginner",
-    level3: "Basic-Intermediate",
-    level4: "Advanced",
-    level5: "Expert",
+    level1: "First Words",
+    level2: "Introductions",
+    level3: "Basic Questions",
+    level4: "Wants & Likes",
+    level5: "Daily Life",
+    level6: "Past & Travel",
+    level7: "Feelings & Opinions",
+    level8: "Complex Conversation",
+    level9: "Advanced Expression",
+    level10: "Native-Like",
 
     // Welcome screen
     welcome: "Welcome!",
@@ -167,11 +177,16 @@ export const translations = {
     learning: "Aprendendo",
 
     // Level names
-    level1: "Ultra-Iniciante",
-    level2: "Iniciante",
-    level3: "Básico-Intermediário",
-    level4: "Avançado",
-    level5: "Expert",
+    level1: "Primeiras Palavras",
+    level2: "Apresentações",
+    level3: "Perguntas Básicas",
+    level4: "Gostos e Desejos",
+    level5: "Vida Diária",
+    level6: "Passado e Viagens",
+    level7: "Sentimentos e Opiniões",
+    level8: "Conversa Complexa",
+    level9: "Expressão Avançada",
+    level10: "Nativo",
 
     // Welcome screen
     welcome: "Bem-vindo!",
