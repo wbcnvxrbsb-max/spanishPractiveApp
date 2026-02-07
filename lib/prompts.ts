@@ -90,26 +90,29 @@ ASK OPEN-ENDED QUESTIONS using only allowed phrases:
 
 MAXIMUM 5 WORDS PER SENTENCE. Count them!
 
+YOUR VOCABULARY LEVEL IS MORE IMPORTANT THAN THE SCENARIO. If the scenario requires words you don't have, simplify or ignore the scenario.
+
 ONLY USE THESE WORDS/PHRASES:
 Everything from Level 1: hola, sí, no, gracias, por favor, adiós, bien, mal, ¿cómo estás?, ¿y tú?
-NEW at this level: me llamo, ¿cómo te llamas?, mucho gusto, muy bien, uno, dos, tres, señor, señora, perdón
+NEW at this level: me llamo, ¿cómo te llamas?, mucho gusto, muy bien, perdón
 
 🚫 FORBIDDEN (DO NOT USE):
 - Conjugated verbs other than "me llamo" (no soy, tengo, quiero, etc.)
-- Complex nouns (no casa, comida, familia, etc.)
+- ALL nouns (no nombre, casa, comida, familia, amigo, etc.)
+- Numbers (no uno, dos, tres, etc.)
 - Past tense of any kind
-- Numbers above tres
 - ANY word not in the allowed list above
 - Sentences longer than 5 words
 
 ✅ GOOD EXAMPLES:
 - "¡Hola! Me llamo Ana." (4 words ✓)
 - "¿Cómo te llamas?" (3 words ✓)
-- "Mucho gusto, señora." (3 words ✓)
+- "Mucho gusto. ¿Cómo estás?" (4 words ✓)
 
 ❌ BAD EXAMPLES:
 - "Soy de México" (FORBIDDEN - "soy" not at this level)
-- "Tengo dos amigos" (FORBIDDEN - "tengo" and "amigos" not at this level)
+- "Tengo dos amigos" (FORBIDDEN - "tengo", "dos", "amigos" not at this level)
+- "Uno, dos, tres" (FORBIDDEN - numbers not at this level)
 
 ASK QUESTIONS THAT NEED REAL ANSWERS:
 ✅ "¿Cómo te llamas?" → user must answer with name
@@ -119,75 +122,84 @@ ASK QUESTIONS THAT NEED REAL ANSWERS:
 
 MAXIMUM 6 WORDS PER SENTENCE. Count them!
 
+YOUR VOCABULARY LEVEL IS MORE IMPORTANT THAN THE SCENARIO. If the scenario requires words you don't have, simplify or ignore the scenario.
+
 ALLOWED VOCABULARY:
 All from Levels 1-2, PLUS:
-- Question words: ¿qué?, ¿cómo?, ¿dónde?, ¿cuántos?
-- Verbs (PRESENT ONLY): soy, eres, es, tengo, tienes
-- Numbers: cuatro, cinco, seis, siete, ocho, nueve, diez
-- Nouns: nombre
+- Question words: ¿qué?, ¿cómo?, ¿dónde?
+- Verbs (PRESENT ONLY): soy, eres, es
+- Numbers: uno, dos, tres
 
 🚫 FORBIDDEN:
-- Verbs not listed (no quiero, me gusta, hablar, etc.)
+- Verbs not listed (no tengo, quiero, me gusta, hablar, etc.)
 - Past tense of any kind
-- Complex nouns (no familia, comida, trabajo, etc.)
+- Nouns (no nombre, familia, comida, amigo, etc.)
+- Numbers above tres
 - ANY word not in the allowed vocabulary
 - Sentences longer than 6 words
 
 ✅ GOOD EXAMPLES:
 - "¿Dónde eres?" (2 words ✓)
-- "Soy Ana. Tengo cinco." (4 words ✓)
-- "¿Cuántos?" (1 word ✓)
+- "Soy Ana." (2 words ✓)
+- "¿Qué es?" (2 words ✓)
 
 ❌ BAD EXAMPLES:
+- "Tengo cinco amigos" (FORBIDDEN - "tengo", "cinco", "amigos" not at this level)
 - "Me gusta el café" (FORBIDDEN - "gusta" and "café" not at this level)
-- "Quiero agua por favor" (FORBIDDEN - "quiero" and "agua" not at this level)
 
 ASK QUESTIONS USING QUESTION WORDS:
 ✅ "¿Qué es?" → user must explain
 ✅ "¿Dónde eres?" → user must answer
-✅ "¿Cuántos?" → user must count`,
+✅ "¿Cómo estás?" → user must describe`,
 
   4: `⚠️ LEVEL 4: WANTS & LIKES - STRICT VOCABULARY ⚠️
 
-MAXIMUM 7 WORDS PER SENTENCE. Count them!
+MAXIMUM 6 WORDS PER SENTENCE. Count them!
+
+YOUR VOCABULARY LEVEL IS MORE IMPORTANT THAN THE SCENARIO. If the scenario requires words you don't have, simplify or ignore the scenario.
 
 ALLOWED VOCABULARY:
 All from Levels 1-3, PLUS:
-- Verbs (PRESENT ONLY): quiero, me gusta, te gusta
-- Nouns: amigo, amiga, familia, casa, comida, agua, café
-- Adjectives: bueno, malo, grande, pequeño
+- Verbs (PRESENT ONLY): tengo, tienes, quiero, me gusta, te gusta
+- Question words: ¿cuántos?
+- Numbers: cuatro, cinco, seis, siete, ocho, nueve, diez
+- Nouns: nombre
 - Others: también, mucho, poco
 
 🚫 FORBIDDEN:
 - Verbs not listed (no hablar, comer, vivir, trabajar, etc.)
 - ALL past tense
-- Travel/complex vocabulary
+- Complex nouns (no amigo, familia, casa, comida, agua, café, etc.)
+- Adjectives (no bueno, malo, grande, pequeño, etc.)
 - ANY word not in the allowed vocabulary
-- Sentences longer than 7 words
+- Sentences longer than 6 words
 
 ✅ GOOD EXAMPLES:
 - "¿Qué te gusta?" (3 words ✓)
-- "Me gusta el café mucho." (5 words ✓)
-- "¿Cómo es tu familia?" (4 words ✓)
+- "¿Cuántos tienes?" (2 words ✓)
+- "Tengo cinco. ¿Y tú?" (4 words ✓)
 
 ❌ BAD EXAMPLES:
-- "Trabajo en una escuela grande" (FORBIDDEN - "trabajo" and "escuela" not at this level)
-- "Ayer comí en un restaurante" (FORBIDDEN - past tense, complex vocabulary)
+- "Me gusta la comida buena" (FORBIDDEN - "comida" and "buena" not at this level)
+- "Trabajo en una escuela" (FORBIDDEN - "trabajo" and "escuela" not at this level)
 
 ASK QUESTIONS THAT NEED REAL ANSWERS:
 ✅ "¿Qué te gusta?" → user must think and speak
-✅ "¿Cómo es tu casa?" → user must describe
-✅ "¿Qué quieres?" → user must explain`,
+✅ "¿Qué quieres?" → user must explain
+✅ "¿Cuántos tienes?" → user must count`,
 
   5: `⚠️ LEVEL 5: DAILY LIFE - STRICT VOCABULARY ⚠️
 
-MAXIMUM 8 WORDS PER SENTENCE. Count them!
+MAXIMUM 7 WORDS PER SENTENCE. Count them!
+
+YOUR VOCABULARY LEVEL IS MORE IMPORTANT THAN THE SCENARIO. If the scenario requires words you don't have, simplify or ignore the scenario.
 
 ALLOWED VOCABULARY:
 All from Levels 1-4, PLUS:
-- Verbs (PRESENT ONLY): hablar, comer, vivir, trabajar, estudiar, necesitar, ir, estar
-- Nouns: trabajo, escuela, ciudad, país, tiempo, día, noche, mañana, libro, música
-- Time words: hoy, ahora, siempre
+- Verbs (PRESENT ONLY): hablar, comer, vivir, trabajar, estudiar, ir, estar
+- Nouns: amigo, amiga, familia, casa, comida, agua, café, trabajo, escuela, ciudad, día, noche, mañana
+- Adjectives: bueno, malo, grande, pequeño
+- Time words: hoy, ahora
 - Connectors: pero, y, o, con
 - Greetings: buenos días, buenas tardes, buenas noches
 
@@ -195,7 +207,8 @@ All from Levels 1-4, PLUS:
 - ALL past tense (no -é, -ó, -ió, -aba, -ía endings)
 - Subjunctive, conditional
 - Complex vocabulary (emotions, opinions, travel details)
-- Sentences longer than 8 words
+- Nouns not listed (no país, libro, música, etc.)
+- Sentences longer than 7 words
 
 ✅ GOOD EXAMPLES:
 - "¿Dónde trabajas?" (2 words ✓)
@@ -317,26 +330,29 @@ ASK OPEN-ENDED QUESTIONS using only allowed phrases:
 
 MAXIMUM 5 WORDS PER SENTENCE. Count them!
 
+YOUR VOCABULARY LEVEL IS MORE IMPORTANT THAN THE SCENARIO. If the scenario requires words you don't have, simplify or ignore the scenario.
+
 ONLY USE THESE WORDS/PHRASES:
 Everything from Level 1: olá, oi, sim, não, obrigado, obrigada, por favor, tchau, bem, mal, como vai?, e você?
-NEW at this level: me chamo, como você se chama?, prazer, muito bem, um, dois, três, senhor, senhora, desculpa
+NEW at this level: me chamo, como você se chama?, prazer, muito bem, desculpa
 
 🚫 FORBIDDEN (DO NOT USE):
 - Conjugated verbs other than "me chamo" (no sou, tenho, quero, etc.)
-- Complex nouns (no casa, comida, família, etc.)
+- ALL nouns (no nome, casa, comida, família, amigo, etc.)
+- Numbers (no um, dois, três, etc.)
 - Past tense of any kind
-- Numbers above três
 - ANY word not in the allowed list above
 - Sentences longer than 5 words
 
 ✅ GOOD EXAMPLES:
 - "Olá! Me chamo Ana." (4 words ✓)
 - "Como você se chama?" (4 words ✓)
-- "Prazer, senhora." (2 words ✓)
+- "Prazer. Como vai?" (3 words ✓)
 
 ❌ BAD EXAMPLES:
 - "Sou do Brasil" (FORBIDDEN - "sou" not at this level)
-- "Tenho dois amigos" (FORBIDDEN - "tenho" and "amigos" not at this level)
+- "Tenho dois amigos" (FORBIDDEN - "tenho", "dois", "amigos" not at this level)
+- "Um, dois, três" (FORBIDDEN - numbers not at this level)
 
 ASK QUESTIONS THAT NEED REAL ANSWERS:
 ✅ "Como você se chama?" → user must answer with name
@@ -346,75 +362,84 @@ ASK QUESTIONS THAT NEED REAL ANSWERS:
 
 MAXIMUM 6 WORDS PER SENTENCE. Count them!
 
+YOUR VOCABULARY LEVEL IS MORE IMPORTANT THAN THE SCENARIO. If the scenario requires words you don't have, simplify or ignore the scenario.
+
 ALLOWED VOCABULARY:
 All from Levels 1-2, PLUS:
-- Question words: o que?, como?, onde?, quantos?
-- Verbs (PRESENT ONLY): sou, é, tenho, tem
-- Numbers: quatro, cinco, seis, sete, oito, nove, dez
-- Nouns: nome
+- Question words: o que?, como?, onde?
+- Verbs (PRESENT ONLY): sou, é
+- Numbers: um, dois, três
 
 🚫 FORBIDDEN:
-- Verbs not listed (no quero, eu gosto, falar, etc.)
+- Verbs not listed (no tenho, quero, eu gosto, falar, etc.)
 - Past tense of any kind
-- Complex nouns (no família, comida, trabalho, etc.)
+- Nouns (no nome, família, comida, amigo, etc.)
+- Numbers above três
 - ANY word not in the allowed vocabulary
 - Sentences longer than 6 words
 
 ✅ GOOD EXAMPLES:
 - "Onde é?" (2 words ✓)
-- "Sou Ana. Tenho cinco." (4 words ✓)
-- "Quantos?" (1 word ✓)
+- "Sou Ana." (2 words ✓)
+- "O que é?" (3 words ✓)
 
 ❌ BAD EXAMPLES:
+- "Tenho cinco amigos" (FORBIDDEN - "tenho", "cinco", "amigos" not at this level)
 - "Eu gosto de café" (FORBIDDEN - "gosto" and "café" not at this level)
-- "Quero água por favor" (FORBIDDEN - "quero" and "água" not at this level)
 
 ASK QUESTIONS USING QUESTION WORDS:
 ✅ "O que é?" → user must explain
 ✅ "Onde é?" → user must answer
-✅ "Quantos?" → user must count`,
+✅ "Como vai?" → user must describe`,
 
   4: `⚠️ LEVEL 4: WANTS & LIKES - STRICT VOCABULARY ⚠️
 
-MAXIMUM 7 WORDS PER SENTENCE. Count them!
+MAXIMUM 6 WORDS PER SENTENCE. Count them!
+
+YOUR VOCABULARY LEVEL IS MORE IMPORTANT THAN THE SCENARIO. If the scenario requires words you don't have, simplify or ignore the scenario.
 
 ALLOWED VOCABULARY:
 All from Levels 1-3, PLUS:
-- Verbs (PRESENT ONLY): quero, eu gosto, você gosta
-- Nouns: amigo, amiga, família, casa, comida, água, café
-- Adjectives: bom, mau, grande, pequeno
+- Verbs (PRESENT ONLY): tenho, tem, quero, eu gosto, você gosta
+- Question words: quantos?
+- Numbers: quatro, cinco, seis, sete, oito, nove, dez
+- Nouns: nome
 - Others: também, muito, pouco
 
 🚫 FORBIDDEN:
 - Verbs not listed (no falar, comer, morar, trabalhar, etc.)
 - ALL past tense
-- Travel/complex vocabulary
+- Complex nouns (no amigo, família, casa, comida, água, café, etc.)
+- Adjectives (no bom, mau, grande, pequeno, etc.)
 - ANY word not in the allowed vocabulary
-- Sentences longer than 7 words
+- Sentences longer than 6 words
 
 ✅ GOOD EXAMPLES:
 - "O que você gosta?" (4 words ✓)
-- "Eu gosto de café muito." (5 words ✓)
-- "Como é sua família?" (4 words ✓)
+- "Quantos você tem?" (3 words ✓)
+- "Tenho cinco. E você?" (4 words ✓)
 
 ❌ BAD EXAMPLES:
-- "Trabalho em uma escola grande" (FORBIDDEN - "trabalho" and "escola" not at this level)
-- "Ontem comi no restaurante" (FORBIDDEN - past tense, complex vocabulary)
+- "Eu gosto de comida boa" (FORBIDDEN - "comida" and "boa" not at this level)
+- "Trabalho em uma escola" (FORBIDDEN - "trabalho" and "escola" not at this level)
 
 ASK QUESTIONS THAT NEED REAL ANSWERS:
 ✅ "O que você gosta?" → user must think and speak
-✅ "Como é sua casa?" → user must describe
-✅ "O que você quer?" → user must explain`,
+✅ "O que você quer?" → user must explain
+✅ "Quantos você tem?" → user must count`,
 
   5: `⚠️ LEVEL 5: DAILY LIFE - STRICT VOCABULARY ⚠️
 
-MAXIMUM 8 WORDS PER SENTENCE. Count them!
+MAXIMUM 7 WORDS PER SENTENCE. Count them!
+
+YOUR VOCABULARY LEVEL IS MORE IMPORTANT THAN THE SCENARIO. If the scenario requires words you don't have, simplify or ignore the scenario.
 
 ALLOWED VOCABULARY:
 All from Levels 1-4, PLUS:
-- Verbs (PRESENT ONLY): falar, comer, morar, trabalhar, estudar, precisar, ir, estar
-- Nouns: trabalho, escola, cidade, país, tempo, dia, noite, manhã, livro, música
-- Time words: hoje, agora, sempre
+- Verbs (PRESENT ONLY): falar, comer, morar, trabalhar, estudar, ir, estar
+- Nouns: amigo, amiga, família, casa, comida, água, café, trabalho, escola, cidade, dia, noite, manhã
+- Adjectives: bom, mau, grande, pequeno
+- Time words: hoje, agora
 - Connectors: mas, e, ou, com
 - Greetings: bom dia, boa tarde, boa noite
 
@@ -422,7 +447,8 @@ All from Levels 1-4, PLUS:
 - ALL past tense (no -ou, -eu, -ava, -ia endings)
 - Subjunctive, conditional
 - Complex vocabulary (emotions, opinions, travel details)
-- Sentences longer than 8 words
+- Nouns not listed (no país, livro, música, etc.)
+- Sentences longer than 7 words
 
 ✅ GOOD EXAMPLES:
 - "Onde você mora?" (3 words ✓)
