@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
+import Groq from "groq-sdk";
+import { toFile } from "groq-sdk/uploads";
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 export async function POST(request: Request) {
-  if (!GROQ_API_KEY) {
+  if (!process.env.GROQ_API_KEY) {
     return NextResponse.json(
       { error: "Groq API key not configured" },
       { status: 500 }
@@ -22,40 +26,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Convert File to Blob with proper bytes and correct extension for Groq
-    const bytes = await file.arrayBuffer();
-    const mimeType = file.type || "audio/webm";
-    const ext = mimeType.includes("mp4") ? "mp4" : "webm";
-    const blob = new Blob([bytes], { type: mimeType });
+    // Convert to a format groq-sdk can handle
+    const audioFile = await toFile(file, "recording.webm");
 
-    // Forward to Groq Whisper API
-    const groqFormData = new FormData();
-    groqFormData.append("file", blob, `recording.${ext}`);
-    groqFormData.append("model", "whisper-large-v3");
-    groqFormData.append("language", language);
+    const transcription = await groq.audio.transcriptions.create({
+      file: audioFile,
+      model: "whisper-large-v3",
+      language,
+    });
 
-    const response = await fetch(
-      "https://api.groq.com/openai/v1/audio/transcriptions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${GROQ_API_KEY}`,
-        },
-        body: groqFormData,
-      }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Groq STT error:", errorText);
-      return NextResponse.json(
-        { error: "Transcription failed" },
-        { status: response.status }
-      );
-    }
-
-    const data = await response.json();
-    return NextResponse.json({ text: data.text || "" });
+    return NextResponse.json({ text: transcription.text || "" });
   } catch (error) {
     console.error("STT error:", error);
     return NextResponse.json(

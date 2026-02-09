@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ["@andresaya/edge-tts"],
+  experimental: {
+    serverComponentsExternalPackages: ["@andresaya/edge-tts"],
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals.push("ws", "bufferutil", "utf-8-validate");

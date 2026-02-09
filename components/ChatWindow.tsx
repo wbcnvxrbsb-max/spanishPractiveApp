@@ -38,6 +38,7 @@ export default function ChatWindow() {
   const [showLevelPopup, setShowLevelPopup] = useState(false);
   const [scenarioVariation, setScenarioVariation] = useState<string | null>(null);
   const [conversationVoice, setConversationVoice] = useState<"feminine" | "masculine">("feminine");
+  const [corrections, setCorrections] = useState<Record<string, string | null>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastMessageIdRef = useRef<string | null>(null);
 
@@ -146,6 +147,22 @@ export default function ChatWindow() {
     [isSpeaking, currentMessageId, speak, stop, conversationVoice]
   );
 
+  const checkGrammar = useCallback(async (messageId: string, content: string) => {
+    try {
+      const response = await fetch("/api/grammar-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: content, targetLang }),
+      });
+      const data = await response.json();
+      if (data.correction) {
+        setCorrections(prev => ({ ...prev, [messageId]: data.correction }));
+      }
+    } catch (error) {
+      console.error("Grammar check error:", error);
+    }
+  }, [targetLang]);
+
   const toggleLanguage = () => {
     setLang((prev) => {
       if (prev === "en") return "es";
@@ -160,6 +177,7 @@ export default function ChatWindow() {
     if (isStarted) {
       stop();
       setMessages([]);
+      setCorrections({});
       setIsStarted(false);
       lastMessageIdRef.current = null;
       setScenarioVariation(null);
@@ -188,6 +206,7 @@ export default function ChatWindow() {
   const handleReturnHome = () => {
     setShowAd(false);
     setMessages([]);
+    setCorrections({});
     setIsStarted(false);
     lastMessageIdRef.current = null;
     setScenarioVariation(null);
@@ -269,6 +288,7 @@ export default function ChatWindow() {
     if (isStarted) {
       stop();
       setMessages([]);
+      setCorrections({});
       setIsStarted(false);
       lastMessageIdRef.current = null;
       setScenarioVariation(null);
@@ -288,6 +308,9 @@ export default function ChatWindow() {
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setIsLoading(true);
+
+    // Check grammar in parallel (non-blocking)
+    checkGrammar(userMsg.id, content.trim());
 
     try {
       const response = await fetch("/api/chat", {
@@ -415,6 +438,7 @@ export default function ChatWindow() {
                 role={msg.role}
                 content={msg.content}
                 messageId={msg.id}
+                correction={corrections[msg.id] || null}
                 onSpeak={ttsSupported ? handleSpeak : undefined}
                 isSpeaking={isSpeaking}
                 isCurrentlySpeaking={currentMessageId === msg.id}
