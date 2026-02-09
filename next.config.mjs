@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ["@andresaya/edge-tts"],
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push("ws", "bufferutil", "utf-8-validate");
+    }
+    return config;
+  },
   async headers() {
     return [
       {

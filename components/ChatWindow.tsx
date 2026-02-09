@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useSession } from "next-auth/react";
 import MessageBubble from "./MessageBubble";
 import MessageInput from "./MessageInput";
 import ScenarioSelector from "./ScenarioSelector";
 import SettingsMenu from "./SettingsMenu";
 import CompletionModal from "./CompletionModal";
+import RewardGate from "./RewardGate";
 import LevelPopup from "./LevelPopup";
 import { Scenario, ComplexityLevel, WordCount, TargetLanguage, scenarioVariations } from "@/lib/prompts";
 import { Language, t } from "@/lib/translations";
@@ -20,6 +22,8 @@ interface Message {
 const COMPLETION_MARKER = "[CONVERSATION_COMPLETE]";
 
 export default function ChatWindow() {
+  const { data: session, update: updateSession } = useSession();
+  const isPremium = session?.user?.isPremium ?? false;
   const [messages, setMessages] = useState<Message[]>([]);
   const [scenario, setScenario] = useState<Scenario>("free_chat");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +34,7 @@ export default function ChatWindow() {
   const [targetLang, setTargetLang] = useState<TargetLanguage>("es");
   const [hideText, setHideText] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
+  const [showReward, setShowAd] = useState(false);
   const [showLevelPopup, setShowLevelPopup] = useState(false);
   const [scenarioVariation, setScenarioVariation] = useState<string | null>(null);
   const [conversationVoice, setConversationVoice] = useState<"feminine" | "masculine">("feminine");
@@ -46,6 +51,17 @@ export default function ChatWindow() {
     setRate,
     currentMessageId,
   } = useSpeechSynthesis(targetLang);
+
+  // Refresh session after Stripe upgrade
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("upgraded") === "true") {
+        updateSession();
+        window.history.replaceState({}, "", "/");
+      }
+    }
+  }, [updateSession]);
 
   // Load preferences from localStorage
   useEffect(() => {
@@ -156,8 +172,21 @@ export default function ChatWindow() {
     return { text, isComplete };
   };
 
-  const handleCompletion = () => {
+  // Called when user clicks "Return Home" on CompletionModal
+  const handleCompletionClose = () => {
     setShowCompletion(false);
+    if (isPremium) {
+      // Premium users skip ads
+      handleReturnHome();
+    } else {
+      // Free users see an ad
+      setShowAd(true);
+    }
+  };
+
+  // Actually return to welcome screen
+  const handleReturnHome = () => {
+    setShowAd(false);
     setMessages([]);
     setIsStarted(false);
     lastMessageIdRef.current = null;
@@ -312,7 +341,12 @@ export default function ChatWindow() {
     <div className="flex flex-col h-screen max-h-screen bg-gray-50">
       {/* Completion Modal */}
       {showCompletion && (
-        <CompletionModal onClose={handleCompletion} lang={lang} />
+        <CompletionModal onClose={handleCompletionClose} lang={lang} />
+      )}
+
+      {/* Reward Gate */}
+      {showReward && (
+        <RewardGate onClose={handleReturnHome} lang={lang} />
       )}
 
       {/* Compact Header */}
@@ -334,6 +368,7 @@ export default function ChatWindow() {
             onHideTextChange={setHideText}
             isSupported={ttsSupported}
             lang={lang}
+            isPremium={isPremium}
           />
           <button
             onClick={toggleLanguage}

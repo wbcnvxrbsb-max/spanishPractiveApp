@@ -54,15 +54,29 @@ const handler = NextAuth({
     signIn: "/",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id;
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { isPremium: true },
+        });
+        token.isPremium = dbUser?.isPremium ?? false;
+      }
+      // Refresh premium status on session update
+      if (trigger === "update" && token.id) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { isPremium: true },
+        });
+        token.isPremium = dbUser?.isPremium ?? false;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.isPremium = token.isPremium as boolean;
       }
       return session;
     },

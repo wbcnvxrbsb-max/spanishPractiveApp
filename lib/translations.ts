@@ -66,6 +66,15 @@ export const translations = {
     hideText: "Ocultar Texto",
     translating: "Traduciendo...",
 
+    // Ads
+    adSupport: "Los anuncios mantienen esta app gratuita",
+    adUpgrade: "Quitar anuncios por $5",
+    adContinue: "Continuar",
+    adBlockerMessage: "Considera apoyarnos quitando los anuncios por $5",
+    continueAnyway: "Continuar de todos modos",
+    premium: "Premium",
+    removeAds: "Quitar Anuncios ($5)",
+
     // Scenario names and descriptions
     scenario_free_chat: "Conversación Libre",
     scenario_free_chat_desc: "Habla de lo que quieras",
@@ -144,6 +153,15 @@ export const translations = {
     hideText: "Hide Text",
     translating: "Translating...",
 
+    // Ads
+    adSupport: "Ads help keep this app free",
+    adUpgrade: "Remove ads for $5",
+    adContinue: "Continue",
+    adBlockerMessage: "Consider supporting us by removing ads for $5",
+    continueAnyway: "Continue anyway",
+    premium: "Premium",
+    removeAds: "Remove Ads ($5)",
+
     // Scenario names and descriptions
     scenario_free_chat: "Free Chat",
     scenario_free_chat_desc: "Chat about anything you'd like",
@@ -221,6 +239,15 @@ export const translations = {
     translate: "Traduzir",
     hideText: "Ocultar Texto",
     translating: "Traduzindo...",
+
+    // Ads
+    adSupport: "Os anuncios ajudam a manter este app gratuito",
+    adUpgrade: "Remover anuncios por $5",
+    adContinue: "Continuar",
+    adBlockerMessage: "Considere nos apoiar removendo os anuncios por $5",
+    continueAnyway: "Continuar mesmo assim",
+    premium: "Premium",
+    removeAds: "Remover Anuncios ($5)",
 
     // Scenario names and descriptions
     scenario_free_chat: "Conversa Livre",

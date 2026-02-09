@@ -14,6 +14,8 @@ model User {
   name          String?
   image         String?
   emailVerified DateTime?
+  isPremium       Boolean   @default(false)
+  stripePaymentId String?
   accounts      Account[]
   sessions      Session[]
   createdAt     DateTime  @default(now())

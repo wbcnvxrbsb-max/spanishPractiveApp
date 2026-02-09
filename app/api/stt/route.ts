@@ -22,9 +22,15 @@ export async function POST(request: Request) {
       );
     }
 
+    // Convert File to Blob with proper bytes and correct extension for Groq
+    const bytes = await file.arrayBuffer();
+    const mimeType = file.type || "audio/webm";
+    const ext = mimeType.includes("mp4") ? "mp4" : "webm";
+    const blob = new Blob([bytes], { type: mimeType });
+
     // Forward to Groq Whisper API
     const groqFormData = new FormData();
-    groqFormData.append("file", file, "recording.webm");
+    groqFormData.append("file", blob, `recording.${ext}`);
     groqFormData.append("model", "whisper-large-v3");
     groqFormData.append("language", language);
 

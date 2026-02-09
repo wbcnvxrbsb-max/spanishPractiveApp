@@ -18,6 +18,7 @@ interface SettingsMenuProps {
   onHideTextChange: (hide: boolean) => void;
   isSupported: boolean;
   lang: Language;
+  isPremium: boolean;
 }
 
 const levelKeys: Record<ComplexityLevel, keyof typeof import("@/lib/translations").translations.en> = {
@@ -46,6 +47,7 @@ export default function SettingsMenu({
   onHideTextChange,
   isSupported,
   lang,
+  isPremium,
 }: SettingsMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -206,6 +208,34 @@ export default function SettingsMenu({
                 {lang === "pt" ? "Ocultar" : lang === "es" ? "Ocultar" : "Hide"}
               </button>
             </div>
+          </div>
+
+          {/* Remove Ads / Premium Badge */}
+          <div className="pt-3 border-t border-gray-200">
+            {isPremium ? (
+              <div className="flex items-center justify-center gap-1 py-2">
+                <span className="text-xs font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">
+                  {t("premium", lang)}
+                </span>
+              </div>
+            ) : (
+              <button
+                onClick={async () => {
+                  try {
+                    const res = await fetch("/api/stripe/checkout", { method: "POST" });
+                    const data = await res.json();
+                    if (data.url) {
+                      window.location.href = data.url;
+                    }
+                  } catch (err) {
+                    console.error("Stripe checkout error:", err);
+                  }
+                }}
+                className="w-full py-2 text-xs font-medium text-green-600 hover:bg-green-50 rounded-md transition-colors"
+              >
+                {t("removeAds", lang)}
+              </button>
+            )}
           </div>
 
           {/* Sign Out */}
