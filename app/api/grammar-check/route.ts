@@ -6,7 +6,7 @@ const groq = new Groq({
 
 export async function POST(request: Request) {
   try {
-    const { text, targetLang } = await request.json();
+    const { text, targetLang, conversationContext } = await request.json();
 
     if (!process.env.GROQ_API_KEY) {
       return Response.json(
@@ -16,6 +16,13 @@ export async function POST(request: Request) {
     }
 
     const langName = targetLang === "pt" ? "Portuguese" : "Spanish";
+
+    let contextBlock = "";
+    if (conversationContext && conversationContext.length > 0) {
+      const recent = conversationContext.slice(-6);
+      contextBlock = "\n\nConversation context (use this to understand what the learner is trying to say):\n" +
+        recent.map((m: {role: string; content: string}) => `${m.role}: ${m.content}`).join("\n");
+    }
 
     const response = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
@@ -36,9 +43,11 @@ Rules:
 - Do NOT change correct words
 - Do NOT add words unless grammatically necessary
 - Do NOT rewrite the sentence in a different style
+- Use the conversation context to understand the learner's INTENT — fix words to match what they clearly meant to say
+- For example, if the bot asked "¿Cómo te llamas?" and the user wrote "me amo", correct it to "me **llamo**"
 - Keep the user's intended meaning
 - Respond with ONLY the corrected sentence or CORRECT, nothing else
-- No explanations, no extra text`,
+- No explanations, no extra text${contextBlock}`,
         },
         {
           role: "user",

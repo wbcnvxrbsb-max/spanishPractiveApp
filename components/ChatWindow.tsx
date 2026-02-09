@@ -147,12 +147,12 @@ export default function ChatWindow() {
     [isSpeaking, currentMessageId, speak, stop, conversationVoice]
   );
 
-  const checkGrammar = useCallback(async (messageId: string, content: string) => {
+  const checkGrammar = useCallback(async (messageId: string, content: string, conversationMessages: {role: string; content: string}[]) => {
     try {
       const response = await fetch("/api/grammar-check", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: content, targetLang }),
+        body: JSON.stringify({ text: content, targetLang, conversationContext: conversationMessages }),
       });
       const data = await response.json();
       if (data.correction) {
@@ -310,7 +310,7 @@ export default function ChatWindow() {
     setIsLoading(true);
 
     // Check grammar in parallel (non-blocking)
-    checkGrammar(userMsg.id, content.trim());
+    checkGrammar(userMsg.id, content.trim(), messages.map(m => ({ role: m.role, content: m.content })));
 
     try {
       const response = await fetch("/api/chat", {
