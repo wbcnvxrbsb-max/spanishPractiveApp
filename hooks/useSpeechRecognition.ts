@@ -44,36 +44,19 @@ export function useSpeechRecognition(targetLang: TargetLanguage = "es") {
         setIsTranscribing(true);
 
         try {
-          // Get API key from localStorage
-          const apiKey = localStorage.getItem("elevenlabs_key");
-          if (!apiKey) {
-            throw new Error("No ElevenLabs API key found");
-          }
-
           const audioBlob = new Blob(chunksRef.current, {
             type: mediaRecorder.mimeType,
           });
 
-          // Map target language to ElevenLabs language code
-          const languageCode = targetLang === "pt" ? "pt" : "es";
-
-          // Create form data for ElevenLabs
           const formData = new FormData();
           formData.append("file", audioBlob, "recording.webm");
-          formData.append("model_id", "scribe_v2");
-          formData.append("language_code", languageCode);
+          formData.append("language", targetLang);
 
-          // Call ElevenLabs STT API directly from browser
-          const response = await fetch(
-            "https://api.elevenlabs.io/v1/speech-to-text",
-            {
-              method: "POST",
-              headers: {
-                "xi-api-key": apiKey,
-              },
-              body: formData,
-            }
-          );
+          // Call our server-side STT route (Groq Whisper)
+          const response = await fetch("/api/stt", {
+            method: "POST",
+            body: formData,
+          });
 
           if (!response.ok) {
             throw new Error("Transcription failed");

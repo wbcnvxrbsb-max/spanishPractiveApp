@@ -4,22 +4,15 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
-import ApiKeySetup from "./ApiKeySetup";
 import ChatWindow from "./ChatWindow";
 
 export default function AppWrapper() {
   const { data: session, status } = useSession();
-  const [hasApiKey, setHasApiKey] = useState<boolean | null>(null);
   const [lang, setLang] = useState<"en" | "es" | "pt">("en");
   const [showRegister, setShowRegister] = useState(false);
 
-  // Check for API key on mount and when session changes
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const key = localStorage.getItem("elevenlabs_key");
-      setHasApiKey(!!key && key.length > 10 && key !== "YOUR_KEY_HERE");
-
-      // Load saved language preference
       const savedLang = localStorage.getItem("uiLanguage");
       if (savedLang === "es" || savedLang === "pt" || savedLang === "en") {
         setLang(savedLang);
@@ -28,7 +21,7 @@ export default function AppWrapper() {
   }, [session]);
 
   // Show loading while checking auth
-  if (status === "loading" || hasApiKey === null) {
+  if (status === "loading") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -38,7 +31,6 @@ export default function AppWrapper() {
 
   // Not logged in
   if (status === "unauthenticated" || !session) {
-    // Show registration screen
     if (showRegister) {
       return (
         <RegisterScreen
@@ -48,7 +40,6 @@ export default function AppWrapper() {
         />
       );
     }
-    // Show login screen
     return (
       <LoginScreen
         lang={lang}
@@ -57,22 +48,12 @@ export default function AppWrapper() {
     );
   }
 
-  // Logged in but no API key - show setup
-  if (status === "authenticated" && !hasApiKey) {
-    return (
-      <ApiKeySetup
-        lang={lang}
-        onComplete={() => setHasApiKey(true)}
-      />
-    );
-  }
-
-  // Logged in with API key - show app
-  if (status === "authenticated" && hasApiKey) {
+  // Logged in - show app directly (no API key setup needed)
+  if (status === "authenticated") {
     return <ChatWindow />;
   }
 
-  // Fallback to login screen for any unexpected state
+  // Fallback
   return (
     <LoginScreen
       lang={lang}

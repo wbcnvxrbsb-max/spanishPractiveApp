@@ -1,22 +1,21 @@
 import { NextResponse } from "next/server";
+import { EdgeTTS, Constants } from "@andresaya/edge-tts";
 
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-
-const VOICES = {
-  feminine: "EXAVITQu4vr4xnSDxMaL", // Sarah
-  masculine: "TX3LPaxmHKxFdv7VOQHJ", // Liam
+// Voice mapping for each language and gender
+const VOICES: Record<string, Record<string, string>> = {
+  es: {
+    feminine: "es-MX-DaliaNeural",
+    masculine: "es-MX-JorgeNeural",
+  },
+  pt: {
+    feminine: "pt-BR-FranciscaNeural",
+    masculine: "pt-BR-AntonioNeural",
+  },
 };
 
 export async function POST(request: Request) {
-  if (!ELEVENLABS_API_KEY) {
-    return NextResponse.json(
-      { error: "ElevenLabs API key not configured" },
-      { status: 500 }
-    );
-  }
-
   try {
-    const { text, voice = "feminine", speed = 1.0 } = await request.json();
+    const { text, voice = "feminine", speed = 1.0, targetLang = "es" } = await request.json();
 
     if (!text) {
       return NextResponse.json(
@@ -25,40 +24,23 @@ export async function POST(request: Request) {
       );
     }
 
-    const voiceId = voice === "masculine" ? VOICES.masculine : VOICES.feminine;
+    const lang = targetLang === "pt" ? "pt" : "es";
+    const voiceName = VOICES[lang][voice] || VOICES[lang].feminine;
 
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text,
-          model_id: "eleven_multilingual_v2",
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            speed: Math.max(0.5, Math.min(1.0, speed)),
-          },
-        }),
-      }
-    );
+    // Convert speed (0.5-1.5) to Edge-TTS rate percentage (-50% to +50%)
+    const ratePercent = Math.round((speed - 1) * 100);
+    const rateStr = ratePercent >= 0 ? `+${ratePercent}%` : `${ratePercent}%`;
 
-    if (!response.ok) {
-      const error = await response.text();
-      console.error("ElevenLabs TTS error:", error);
-      return NextResponse.json(
-        { error: "TTS generation failed" },
-        { status: response.status }
-      );
-    }
+    const tts = new EdgeTTS();
+    await tts.synthesize(text, voiceName, {
+      rate: rateStr,
+      outputFormat: Constants.OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3,
+    });
 
-    const audioBuffer = await response.arrayBuffer();
+    const audioBuffer = tts.toBuffer();
+    const uint8Array = new Uint8Array(audioBuffer);
 
-    return new NextResponse(audioBuffer, {
+    return new NextResponse(uint8Array, {
       headers: {
         "Content-Type": "audio/mpeg",
         "Content-Length": audioBuffer.byteLength.toString(),
@@ -67,7 +49,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("TTS error:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "TTS generation failed" },
       { status: 500 }
     );
   }
