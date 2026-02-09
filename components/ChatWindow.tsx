@@ -428,6 +428,18 @@ export default function ChatWindow() {
               >
                 {t("startConversation", lang)}
               </button>
+              <p className="mt-4 text-sm text-gray-500 leading-relaxed">
+                New to {targetLang === "pt" ? "Portuguese" : "Spanish"}? Visit{" "}
+                <a
+                  href="https://www.duolingo.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-600 font-medium hover:underline"
+                >
+                  Duolingo
+                </a>{" "}
+                first to learn some basic words and phrases!
+              </p>
             </div>
           </div>
         ) : (
