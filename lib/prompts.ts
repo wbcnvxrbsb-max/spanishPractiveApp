@@ -217,7 +217,9 @@ ${beginnerNote}
 
 ${vocabularyLevels[level]}
 
-Respond ONLY in ${langName}. End with [CONVERSATION_COMPLETE] only when the user says goodbye (${goodbyes}/${goodnight}).`;
+Respond ONLY in ${langName}.
+
+NEVER include [CONVERSATION_COMPLETE] unless the user has EXPLICITLY said goodbye using words like: ${goodbyes}, or ${goodnight}. A greeting like "Hola" or "Olá" is NOT a goodbye. Only end the conversation after multiple exchanges when the user clearly signals they want to stop.`;
 };
 
 function getRandomElement<T>(arr: T[]): T {

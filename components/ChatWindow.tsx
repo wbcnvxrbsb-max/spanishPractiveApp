@@ -251,7 +251,8 @@ export default function ChatWindow() {
         throw new Error(data.error);
       }
 
-      const { text, isComplete } = processAIResponse(data.message);
+      const { text } = processAIResponse(data.message);
+      // Never end conversation on the very first exchange
 
       const userMsg: Message = {
         id: generateId(),
@@ -265,10 +266,6 @@ export default function ChatWindow() {
       };
 
       setMessages([userMsg, assistantMsg]);
-
-      if (isComplete) {
-        setTimeout(() => setShowCompletion(true), 1500);
-      }
     } catch (error) {
       console.error("Error starting conversation:", error);
       setMessages([
