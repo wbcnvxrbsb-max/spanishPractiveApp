@@ -10,7 +10,7 @@ let globalVoiceIndex = 0;
 // Persistent AudioContext to keep audio unlocked after user interaction
 let audioContext: AudioContext | null = null;
 
-export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
+export function useSpeechSynthesis(targetLang: TargetLanguage = "es", onPlaybackEnd?: () => void) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSupported] = useState(true);
   const [rate, setRate] = useState(0.9);
@@ -122,6 +122,7 @@ export function useSpeechSynthesis(targetLang: TargetLanguage = "es") {
           setIsSpeaking(false);
           setCurrentMessageId(null);
           sourceNodeRef.current = null;
+          onPlaybackEnd?.();
         };
 
         sourceNode.start(0);

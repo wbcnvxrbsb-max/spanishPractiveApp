@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, KeyboardEvent } from "react";
-import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { Language, t } from "@/lib/translations";
 import { TargetLanguage } from "@/lib/prompts";
 
@@ -10,27 +9,24 @@ interface MessageInputProps {
   disabled?: boolean;
   lang: Language;
   targetLang: TargetLanguage;
+  // STT props lifted from ChatWindow (for real-time coordination)
+  isListening: boolean;
+  isTranscribing: boolean;
+  isSupported: boolean;
+  onToggleListening: () => void;
 }
 
-export default function MessageInput({ onSend, disabled, lang, targetLang }: MessageInputProps) {
+export default function MessageInput({
+  onSend,
+  disabled,
+  lang,
+  targetLang: _targetLang,
+  isListening,
+  isTranscribing,
+  isSupported,
+  onToggleListening,
+}: MessageInputProps) {
   const [input, setInput] = useState("");
-  const {
-    transcript,
-    isListening,
-    isSupported,
-    isTranscribing,
-    startListening,
-    stopListening,
-    resetTranscript,
-  } = useSpeechRecognition(targetLang);
-
-  // When recording stops and we have a transcript, auto-send it
-  useEffect(() => {
-    if (!isListening && transcript) {
-      onSend(transcript);
-      resetTranscript();
-    }
-  }, [isListening, transcript, onSend, resetTranscript]);
 
   const handleSend = () => {
     if (input.trim() && !disabled) {
@@ -46,15 +42,6 @@ export default function MessageInput({ onSend, disabled, lang, targetLang }: Mes
     }
   };
 
-  const toggleListening = () => {
-    if (isListening) {
-      stopListening();
-    } else {
-      resetTranscript();
-      startListening();
-    }
-  };
-
   // Global Enter key to toggle recording when not typing
   useEffect(() => {
     const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
@@ -64,21 +51,21 @@ export default function MessageInput({ onSend, disabled, lang, targetLang }: Mes
 
         if (!isTyping && !disabled && !isTranscribing && isSupported) {
           e.preventDefault();
-          toggleListening();
+          onToggleListening();
         }
       }
     };
 
     window.addEventListener("keydown", handleGlobalKeyDown);
     return () => window.removeEventListener("keydown", handleGlobalKeyDown);
-  }, [disabled, isTranscribing, isSupported, isListening]);
+  }, [disabled, isTranscribing, isSupported, onToggleListening]);
 
   return (
     <div className="flex items-center gap-2 p-3 bg-white border-t border-gray-200">
       {/* Microphone Button - LEFT */}
       {isSupported && (
         <button
-          onClick={toggleListening}
+          onClick={onToggleListening}
           disabled={disabled || isTranscribing}
           className={`p-3 rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all ${
             isListening
@@ -100,7 +87,7 @@ export default function MessageInput({ onSend, disabled, lang, targetLang }: Mes
             </svg>
           ) : (
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 3 3 3 3z" />
               <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
             </svg>
           )}

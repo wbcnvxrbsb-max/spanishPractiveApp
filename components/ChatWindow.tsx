@@ -12,6 +12,7 @@ import LevelPopup from "./LevelPopup";
 import { Scenario, ComplexityLevel, WordCount, TargetLanguage, scenarioVariations } from "@/lib/prompts";
 import { Language, t } from "@/lib/translations";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
+import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 
 interface Message {
   id: string;
@@ -20,6 +21,7 @@ interface Message {
 }
 
 const COMPLETION_MARKER = "[CONVERSATION_COMPLETE]";
+const RESPONSE_TIMEOUT_MS = 15000;
 
 export default function ChatWindow() {
   const { data: session, update: updateSession } = useSession();
@@ -39,9 +41,82 @@ export default function ChatWindow() {
   const [scenarioVariation, setScenarioVariation] = useState<string | null>(null);
   const [conversationVoice, setConversationVoice] = useState<"feminine" | "masculine">("feminine");
   const [corrections, setCorrections] = useState<Record<string, string | null>>({});
+  const [isRealTime, setIsRealTime] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastMessageIdRef = useRef<string | null>(null);
+  const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const countdownValueRef = useRef<number>(0);
+  // Stable ref for isRealTime so callbacks don't go stale
+  const isRealTimeRef = useRef(isRealTime);
+  useEffect(() => { isRealTimeRef.current = isRealTime; }, [isRealTime]);
 
+  // --- Speech Recognition (lifted up) ---
+  const {
+    transcript,
+    isListening,
+    isSupported: sttSupported,
+    isTranscribing,
+    startListening,
+    stopListening,
+    resetTranscript,
+  } = useSpeechRecognition(targetLang, isRealTime); // silence detection ON in real-time mode
+
+  // Auto-send transcript when recording stops
+  useEffect(() => {
+    if (!isListening && transcript) {
+      stopCountdown();
+      sendMessage(transcript);
+      resetTranscript();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isListening, transcript]);
+
+  // Stop countdown if user starts speaking in real-time mode
+  useEffect(() => {
+    if (isListening) {
+      stopCountdown();
+    }
+  }, [isListening]);
+
+  // --- Countdown helpers ---
+  const stopCountdown = useCallback(() => {
+    if (countdownTimerRef.current) {
+      clearInterval(countdownTimerRef.current);
+      countdownTimerRef.current = null;
+    }
+    setCountdown(null);
+  }, []);
+
+  const startCountdown = useCallback((onExpire: () => void) => {
+    stopCountdown();
+    countdownValueRef.current = Math.ceil(RESPONSE_TIMEOUT_MS / 1000);
+    setCountdown(countdownValueRef.current);
+    countdownTimerRef.current = setInterval(() => {
+      countdownValueRef.current -= 1;
+      setCountdown(countdownValueRef.current);
+      if (countdownValueRef.current <= 0) {
+        stopCountdown();
+        onExpire();
+      }
+    }, 1000);
+  }, [stopCountdown]);
+
+  // Called when TTS playback finishes
+  const handlePlaybackEnd = useCallback(() => {
+    if (!isRealTimeRef.current) return;
+    // Auto-start mic and begin countdown
+    startListening();
+    startCountdown(() => {
+      // Timer expired: nudge the AI
+      stopListening();
+      sendNudge();
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startListening, startCountdown, stopListening]);
+
+  // --- Speech Synthesis ---
   const {
     speak,
     stop,
@@ -51,7 +126,7 @@ export default function ChatWindow() {
     rate,
     setRate,
     currentMessageId,
-  } = useSpeechSynthesis(targetLang);
+  } = useSpeechSynthesis(targetLang, handlePlaybackEnd);
 
   // Refresh session after Stripe upgrade
   useEffect(() => {
@@ -71,11 +146,11 @@ export default function ChatWindow() {
     const savedLang = localStorage.getItem("uiLanguage");
     const savedTargetLang = localStorage.getItem("targetLanguage");
     const savedHideText = localStorage.getItem("hideText");
+    const savedRealTime = localStorage.getItem("isRealTime");
     if (savedComplexity) {
       const old = parseInt(savedComplexity);
       const migrated = localStorage.getItem("levelMigratedV10");
       if (!migrated && old >= 1 && old <= 5) {
-        // Migrate old 5-level scale to new 10-level scale
         const mapping: Record<number, number> = { 1: 2, 2: 4, 3: 6, 4: 8, 5: 10 };
         const newLevel = mapping[old] || old;
         setComplexity(newLevel as ComplexityLevel);
@@ -89,28 +164,16 @@ export default function ChatWindow() {
     if (savedLang) setLang(savedLang as Language);
     if (savedTargetLang) setTargetLang(savedTargetLang as TargetLanguage);
     if (savedHideText) setHideText(savedHideText === "true");
+    if (savedRealTime) setIsRealTime(savedRealTime === "true");
   }, []);
 
   // Save preferences
-  useEffect(() => {
-    localStorage.setItem("complexity", complexity.toString());
-  }, [complexity]);
-
-  useEffect(() => {
-    localStorage.setItem("wordCount", wordCount);
-  }, [wordCount]);
-
-  useEffect(() => {
-    localStorage.setItem("uiLanguage", lang);
-  }, [lang]);
-
-  useEffect(() => {
-    localStorage.setItem("targetLanguage", targetLang);
-  }, [targetLang]);
-
-  useEffect(() => {
-    localStorage.setItem("hideText", hideText.toString());
-  }, [hideText]);
+  useEffect(() => { localStorage.setItem("complexity", complexity.toString()); }, [complexity]);
+  useEffect(() => { localStorage.setItem("wordCount", wordCount); }, [wordCount]);
+  useEffect(() => { localStorage.setItem("uiLanguage", lang); }, [lang]);
+  useEffect(() => { localStorage.setItem("targetLanguage", targetLang); }, [targetLang]);
+  useEffect(() => { localStorage.setItem("hideText", hideText.toString()); }, [hideText]);
+  useEffect(() => { localStorage.setItem("isRealTime", isRealTime.toString()); }, [isRealTime]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -173,9 +236,9 @@ export default function ChatWindow() {
 
   const handleTargetLangChange = (newTargetLang: TargetLanguage) => {
     setTargetLang(newTargetLang);
-    // Reset conversation when changing learning language
     if (isStarted) {
       stop();
+      stopCountdown();
       setMessages([]);
       setCorrections({});
       setIsStarted(false);
@@ -190,19 +253,15 @@ export default function ChatWindow() {
     return { text, isComplete };
   };
 
-  // Called when user clicks "Return Home" on CompletionModal
   const handleCompletionClose = () => {
     setShowCompletion(false);
     if (isPremium) {
-      // Premium users skip ads
       handleReturnHome();
     } else {
-      // Free users see an ad
       setShowAd(true);
     }
   };
 
-  // Actually return to welcome screen
   const handleReturnHome = () => {
     setShowAd(false);
     setMessages([]);
@@ -211,18 +270,16 @@ export default function ChatWindow() {
     lastMessageIdRef.current = null;
     setScenarioVariation(null);
     stop();
+    stopCountdown();
   };
 
   const startConversation = async () => {
-    // Unlock audio playback on user interaction
     unlockAudio();
-
     setIsStarted(true);
     setIsLoading(true);
     setShowLevelPopup(true);
     stop();
 
-    // Select persona and voice for this conversation
     const variations = scenarioVariations[scenario];
     const selectedVariation = variations[Math.floor(Math.random() * variations.length)];
     const selectedVoice = Math.random() < 0.5 ? "feminine" : "masculine" as const;
@@ -284,6 +341,7 @@ export default function ChatWindow() {
     setScenario(newScenario);
     if (isStarted) {
       stop();
+      stopCountdown();
       setMessages([]);
       setCorrections({});
       setIsStarted(false);
@@ -295,7 +353,9 @@ export default function ChatWindow() {
   const sendMessage = async (content: string) => {
     if (!content.trim()) return;
 
+    // Interrupt AI if it's speaking
     stop();
+    stopCountdown();
 
     const userMsg: Message = {
       id: generateId(),
@@ -306,7 +366,6 @@ export default function ChatWindow() {
     setMessages(newMessages);
     setIsLoading(true);
 
-    // Check grammar in parallel (non-blocking)
     checkGrammar(userMsg.id, content.trim(), messages.map(m => ({ role: m.role, content: m.content })));
 
     try {
@@ -357,6 +416,37 @@ export default function ChatWindow() {
     }
   };
 
+  // Nudge the AI when the user doesn't respond in time
+  const sendNudge = useCallback(async () => {
+    const nudge = targetLang === "pt"
+      ? "[o usuário ficou em silêncio — continue a conversa ou pergunte algo]"
+      : "[el usuario quedó en silencio — continúa la conversación o pregunta algo]";
+    await sendMessage(nudge);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetLang, messages, scenarioVariation, scenario, complexity, wordCount]);
+
+  const handleToggleListening = useCallback(() => {
+    if (isListening) {
+      stopListening();
+    } else {
+      // Interrupt AI if speaking
+      if (isSpeaking) stop();
+      stopCountdown();
+      resetTranscript();
+      startListening();
+    }
+  }, [isListening, isSpeaking, stop, stopCountdown, resetTranscript, startListening, stopListening]);
+
+  const toggleRealTime = () => {
+    const newVal = !isRealTime;
+    setIsRealTime(newVal);
+    // If turning off, clean up any active real-time state
+    if (!newVal) {
+      stopCountdown();
+      if (isListening) stopListening();
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen max-h-screen bg-gray-50">
       {/* Completion Modal */}
@@ -373,8 +463,31 @@ export default function ChatWindow() {
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-2 shadow-md flex items-center justify-between">
         <h1 className="text-base font-bold">{t(targetLang === "pt" ? "titlePt" : "title", lang)}</h1>
 
-        {/* Right side: Settings + Language */}
+        {/* Right side: Real-time toggle + Settings + Language */}
         <div className="flex items-center gap-2">
+          {/* Real-time mode toggle — always visible */}
+          <button
+            onClick={toggleRealTime}
+            title={isRealTime ? "Switch to Self-paced" : "Switch to Real-time"}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-all border ${
+              isRealTime
+                ? "bg-green-400 text-green-900 border-green-300 shadow-sm shadow-green-300/50"
+                : "bg-white/20 text-white border-white/30 hover:bg-white/30"
+            }`}
+          >
+            {isRealTime ? (
+              <>
+                <span className="w-1.5 h-1.5 rounded-full bg-green-800 animate-pulse" />
+                Live
+              </>
+            ) : (
+              <>
+                <span className="w-1.5 h-1.5 rounded-full bg-white/60" />
+                Paced
+              </>
+            )}
+          </button>
+
           <SettingsMenu
             rate={rate}
             onRateChange={setRate}
@@ -460,14 +573,8 @@ export default function ChatWindow() {
                 <div className="ml-10 bg-white text-gray-800 px-4 py-2.5 rounded-2xl rounded-bl-md shadow-sm border border-gray-100">
                   <div className="flex gap-1">
                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                    <span
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "0.1s" }}
-                    />
-                    <span
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "0.2s" }}
-                    />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
                   </div>
                 </div>
               </div>
@@ -477,9 +584,35 @@ export default function ChatWindow() {
         )}
       </div>
 
-      {/* Input Area - Always visible when started */}
+      {/* Countdown indicator for real-time mode */}
+      {isStarted && isRealTime && countdown !== null && (
+        <div className="px-3 pb-1 flex justify-center">
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <svg className="w-3 h-3 text-green-500 animate-spin" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <span>
+              {isListening
+                ? "Listening..."
+                : `Your turn · ${countdown}s`}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Input Area */}
       {isStarted && (
-        <MessageInput onSend={sendMessage} disabled={isLoading} lang={lang} targetLang={targetLang} />
+        <MessageInput
+          onSend={sendMessage}
+          disabled={isLoading}
+          lang={lang}
+          targetLang={targetLang}
+          isListening={isListening}
+          isTranscribing={isTranscribing}
+          isSupported={sttSupported}
+          onToggleListening={handleToggleListening}
+        />
       )}
     </div>
   );
