@@ -134,7 +134,7 @@ export default function ChatWindow() {
       const params = new URLSearchParams(window.location.search);
       if (params.get("upgraded") === "true") {
         updateSession();
-        window.history.replaceState({}, "", "/");
+        window.history.replaceState({}, "", "/practice");
       }
     }
   }, [updateSession]);

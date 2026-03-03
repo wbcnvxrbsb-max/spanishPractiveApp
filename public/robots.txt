@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /privacy
+Allow: /terms
+Disallow: /api/
+Disallow: /practice
+
+Sitemap: https://practice-languages.onrender.com/sitemap.xml

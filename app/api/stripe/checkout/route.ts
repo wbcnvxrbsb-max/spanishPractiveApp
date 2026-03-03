@@ -46,8 +46,8 @@ export async function POST() {
       metadata: {
         userId: user.id,
       },
-      success_url: `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/?upgraded=true`,
-      cancel_url: `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/`,
+      success_url: `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/practice?upgraded=true`,
+      cancel_url: `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/practice`,
     });
 
     return NextResponse.json({ url: checkoutSession.url });

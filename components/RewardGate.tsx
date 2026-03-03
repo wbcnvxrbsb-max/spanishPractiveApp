@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Language, t } from "@/lib/translations";
+import AdUnit from "./AdUnit";
 
 interface RewardGateProps {
   onClose: () => void;
@@ -38,8 +39,9 @@ export default function RewardGate({ onClose, lang }: RewardGateProps) {
           {t("adSupport", lang)}
         </p>
 
-        {/* Placeholder content */}
-        <div className="bg-red-500 rounded-lg w-full h-[250px] flex items-center justify-center mb-4">
+        {/* Ad unit */}
+        <div className="w-full min-h-[250px] mb-4">
+          <AdUnit adSlot="6134119618" adFormat="rectangle" />
         </div>
 
         {countdown > 0 ? (

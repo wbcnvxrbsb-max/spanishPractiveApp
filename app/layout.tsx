@@ -3,8 +3,29 @@ import "./globals.css";
 import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
-  title: "Practica Español - Spanish Conversation Practice",
-  description: "Practice Spanish conversation with an AI tutor that adapts to your level",
+  metadataBase: new URL("https://practice-languages.onrender.com"),
+  title: {
+    default: "Practica - AI Spanish & Portuguese Conversation Practice",
+    template: "%s | Practica",
+  },
+  description:
+    "Practice Spanish and Portuguese through natural AI conversation. 10 levels, 6 real-world scenarios, voice recognition, and instant grammar correction.",
+  keywords: [
+    "Spanish practice",
+    "Portuguese practice",
+    "AI language tutor",
+    "conversation practice",
+    "learn Spanish",
+    "learn Portuguese",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "Practica",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -13,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="en">
       <head>
         <meta name="google-adsense-account" content="ca-pub-4189915978245468" />
         <script
