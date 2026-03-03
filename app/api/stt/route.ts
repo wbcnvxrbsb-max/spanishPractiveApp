@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
 import { toFile } from "groq-sdk/uploads";
+import { getLanguage } from "@/lib/languages";
+import type { TargetLanguage } from "@/lib/languages";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -17,7 +19,8 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
-    const language = (formData.get("language") as string) || "es";
+    const targetLang = (formData.get("language") as string) || "es";
+    const language = getLanguage(targetLang as TargetLanguage)?.whisperCode ?? targetLang;
 
     if (!file) {
       return NextResponse.json(

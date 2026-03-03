@@ -17,7 +17,7 @@ export default function LoginScreen({ lang = "en", onRegister }: LoginScreenProp
   const text = {
     en: {
       title: "Language Practice",
-      subtitle: "Practice Spanish or Portuguese conversation with AI",
+      subtitle: "Practice any language conversation with AI",
       signInGoogle: "Sign in with Google",
       or: "or",
       email: "Email",
@@ -29,7 +29,7 @@ export default function LoginScreen({ lang = "en", onRegister }: LoginScreenProp
     },
     es: {
       title: "Práctica de Idiomas",
-      subtitle: "Practica conversación en español o portugués con IA",
+      subtitle: "Practica conversación en cualquier idioma con IA",
       signInGoogle: "Iniciar sesión con Google",
       or: "o",
       email: "Correo electrónico",
@@ -41,7 +41,7 @@ export default function LoginScreen({ lang = "en", onRegister }: LoginScreenProp
     },
     pt: {
       title: "Prática de Idiomas",
-      subtitle: "Pratique conversação em espanhol ou português com IA",
+      subtitle: "Pratique conversação em qualquer idioma com IA",
       signInGoogle: "Entrar com Google",
       or: "ou",
       email: "E-mail",

@@ -9,7 +9,9 @@ import SettingsMenu from "./SettingsMenu";
 import CompletionModal from "./CompletionModal";
 import RewardGate from "./RewardGate";
 import LevelPopup from "./LevelPopup";
-import { Scenario, ComplexityLevel, WordCount, TargetLanguage, scenarioVariations } from "@/lib/prompts";
+import { Scenario, ComplexityLevel, WordCount, scenarioVariations } from "@/lib/prompts";
+import { getLanguage, LANGUAGE_LIST } from "@/lib/languages";
+import type { TargetLanguage } from "@/lib/languages";
 import { Language, t } from "@/lib/translations";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
@@ -286,7 +288,7 @@ export default function ChatWindow() {
     setScenarioVariation(selectedVariation);
     setConversationVoice(selectedVoice);
 
-    const greeting = targetLang === "pt" ? "Olá!" : "¡Hola!";
+    const greeting = getLanguage(targetLang).greeting;
 
     try {
       const response = await fetch("/api/chat", {
@@ -418,9 +420,8 @@ export default function ChatWindow() {
 
   // Nudge the AI when the user doesn't respond in time
   const sendNudge = useCallback(async () => {
-    const nudge = targetLang === "pt"
-      ? "[o usuário ficou em silêncio — continue a conversa ou pergunte algo]"
-      : "[el usuario quedó en silencio — continúa la conversación o pregunta algo]";
+    const langName = getLanguage(targetLang).name;
+    const nudge = `[the user went silent — continue the conversation or ask something in ${langName}]`;
     await sendMessage(nudge);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetLang, messages, scenarioVariation, scenario, complexity, wordCount]);
@@ -461,7 +462,7 @@ export default function ChatWindow() {
 
       {/* Compact Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-2 shadow-md flex items-center justify-between">
-        <h1 className="text-base font-bold">{t(targetLang === "pt" ? "titlePt" : "title", lang)}</h1>
+        <h1 className="text-base font-bold">{lang === "pt" ? "Pratique" : lang === "es" ? "Practica" : "Practice"} {getLanguage(targetLang).name}</h1>
 
         {/* Right side: Real-time toggle + Settings + Language */}
         <div className="flex items-center gap-2">
@@ -525,12 +526,12 @@ export default function ChatWindow() {
         {!isStarted ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
             <div className="bg-white rounded-2xl shadow-sm p-6 max-w-sm">
-              <div className="text-4xl mb-3">{targetLang === "pt" ? "🇧🇷" : "🇪🇸"}</div>
+              <div className="text-4xl mb-3">{getLanguage(targetLang).flag}</div>
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 {t("welcome", lang)}
               </h2>
               <p className="text-gray-600 mb-4 text-sm">
-                {t(targetLang === "pt" ? "welcomeTextPt" : "welcomeText", lang)}
+                {t("welcomeText", lang)}
               </p>
               <button
                 onClick={startConversation}
@@ -539,7 +540,7 @@ export default function ChatWindow() {
                 {t("startConversation", lang)}
               </button>
               <p className="mt-4 text-sm text-gray-500 leading-relaxed">
-                New to {targetLang === "pt" ? "Portuguese" : "Spanish"}? Visit{" "}
+                New to {getLanguage(targetLang).name}? Visit{" "}
                 <a
                   href="https://www.duolingo.com"
                   target="_blank"

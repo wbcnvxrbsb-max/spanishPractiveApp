@@ -1,4 +1,5 @@
 import Groq from "groq-sdk";
+import { getLanguage } from "@/lib/languages";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const langName = targetLang === "pt" ? "Portuguese" : "Spanish";
+    const langName = getLanguage(targetLang)?.name ?? "Spanish";
 
     let contextBlock = "";
     if (conversationContext && conversationContext.length > 0) {

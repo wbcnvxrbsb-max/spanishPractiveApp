@@ -1,0 +1,581 @@
+import type { ComplexityLevel } from "./prompts";
+
+export type TargetLanguage =
+  | "es" | "pt" | "fr" | "de" | "it" | "ja" | "ko" | "zh"
+  | "ru" | "hi" | "ar" | "tr" | "nl" | "sv" | "nb" | "da"
+  | "fi" | "pl" | "el" | "cs" | "ro" | "hu" | "uk" | "vi"
+  | "id" | "he" | "ga" | "cy" | "hw" | "ht" | "sw" | "yi"
+  | "gd" | "ca" | "eo" | "la" | "zu" | "nv";
+
+export interface LanguageConfig {
+  code: TargetLanguage;
+  name: string;
+  nativeName: string;
+  flag: string;
+  greeting: string;
+  goodbyes: string;
+  goodnight: string;
+  fillers: string;
+  emotionalExamples: string;
+  whisperCode: string;
+  ttsVoices: {
+    feminine: string;
+    masculine: string;
+  };
+}
+
+export const LANGUAGES: Record<TargetLanguage, LanguageConfig> = {
+  es: {
+    code: "es",
+    name: "Spanish",
+    nativeName: "Español",
+    flag: "🇪🇸",
+    greeting: "¡Hola!",
+    goodbyes: "adiós, hasta luego, hasta pronto, chao, nos vemos",
+    goodnight: "buenas noches",
+    fillers: "bueno, pues, mira, oye, a ver, vale, ¿sabes?",
+    emotionalExamples: "jaja, ¡no me digas!, ¡qué bien!, ¿en serio?, ¡uy!",
+    whisperCode: "es",
+    ttsVoices: { feminine: "es-MX-DaliaNeural", masculine: "es-MX-JorgeNeural" },
+  },
+  pt: {
+    code: "pt",
+    name: "Portuguese",
+    nativeName: "Português",
+    flag: "🇧🇷",
+    greeting: "Olá!",
+    goodbyes: "tchau, até logo, até mais, adeus, nos vemos",
+    goodnight: "boa noite",
+    fillers: "bom, então, olha, sabe, tipo, nossa, é mesmo?",
+    emotionalExamples: "kkk/haha, sério?!, que legal!, nossa!, poxa...",
+    whisperCode: "pt",
+    ttsVoices: { feminine: "pt-BR-FranciscaNeural", masculine: "pt-BR-AntonioNeural" },
+  },
+  fr: {
+    code: "fr",
+    name: "French",
+    nativeName: "Français",
+    flag: "🇫🇷",
+    greeting: "Bonjour !",
+    goodbyes: "au revoir, à bientôt, à tout à l'heure, salut, ciao",
+    goodnight: "bonne nuit",
+    fillers: "bon, eh bien, tu vois, écoute, genre, hein",
+    emotionalExamples: "haha, c'est pas vrai !, super !, sérieux ?, oh là là !",
+    whisperCode: "fr",
+    ttsVoices: { feminine: "fr-FR-DeniseNeural", masculine: "fr-FR-HenriNeural" },
+  },
+  de: {
+    code: "de",
+    name: "German",
+    nativeName: "Deutsch",
+    flag: "🇩🇪",
+    greeting: "Hallo!",
+    goodbyes: "tschüss, auf Wiedersehen, bis bald, bis später, ciao",
+    goodnight: "gute Nacht",
+    fillers: "also, naja, weißt du, eigentlich, übrigens, na ja",
+    emotionalExamples: "haha, echt?!, wie cool!, ach so!, Mensch!",
+    whisperCode: "de",
+    ttsVoices: { feminine: "de-DE-KatjaNeural", masculine: "de-DE-ConradNeural" },
+  },
+  it: {
+    code: "it",
+    name: "Italian",
+    nativeName: "Italiano",
+    flag: "🇮🇹",
+    greeting: "Ciao!",
+    goodbyes: "arrivederci, ciao, a presto, a dopo, ci vediamo",
+    goodnight: "buonanotte",
+    fillers: "allora, cioè, sai, guarda, tipo, vabbè, dai",
+    emotionalExamples: "ahah, davvero?!, che bello!, serio?, mamma mia!",
+    whisperCode: "it",
+    ttsVoices: { feminine: "it-IT-ElsaNeural", masculine: "it-IT-DiegoNeural" },
+  },
+  ja: {
+    code: "ja",
+    name: "Japanese",
+    nativeName: "日本語",
+    flag: "🇯🇵",
+    greeting: "こんにちは！",
+    goodbyes: "さようなら, またね, じゃあね, バイバイ, またあとで",
+    goodnight: "おやすみなさい",
+    fillers: "えーと, あのー, そうですね, うん, ね, まあ",
+    emotionalExamples: "笑, まじで！, すごい！, え、本当？, あー！",
+    whisperCode: "ja",
+    ttsVoices: { feminine: "ja-JP-NanamiNeural", masculine: "ja-JP-KeitaNeural" },
+  },
+  ko: {
+    code: "ko",
+    name: "Korean",
+    nativeName: "한국어",
+    flag: "🇰🇷",
+    greeting: "안녕하세요!",
+    goodbyes: "안녕히 가세요, 잘 가, 나중에 봐요, 또 봐요, 바이바이",
+    goodnight: "잘 자요",
+    fillers: "음, 그러니까, 있잖아, 어, 뭐랄까, 사실",
+    emotionalExamples: "ㅋㅋㅋ, 진짜?!, 대박!, 정말?, 아!",
+    whisperCode: "ko",
+    ttsVoices: { feminine: "ko-KR-SunHiNeural", masculine: "ko-KR-InJoonNeural" },
+  },
+  zh: {
+    code: "zh",
+    name: "Chinese",
+    nativeName: "中文",
+    flag: "🇨🇳",
+    greeting: "你好！",
+    goodbyes: "再见, 拜拜, 回头见, 待会见, 慢走",
+    goodnight: "晚安",
+    fillers: "嗯, 那个, 就是说, 你知道吧, 其实, 对了",
+    emotionalExamples: "哈哈, 真的吗！, 太棒了！, 是吗？, 哇！",
+    whisperCode: "zh",
+    ttsVoices: { feminine: "zh-CN-XiaoxiaoNeural", masculine: "zh-CN-YunxiNeural" },
+  },
+  ru: {
+    code: "ru",
+    name: "Russian",
+    nativeName: "Русский",
+    flag: "🇷🇺",
+    greeting: "Привет!",
+    goodbyes: "до свидания, пока, до скорого, увидимся, чао",
+    goodnight: "спокойной ночи",
+    fillers: "ну, вот, знаешь, короче, типа, собственно",
+    emotionalExamples: "хаха, правда?!, здорово!, серьёзно?, ого!",
+    whisperCode: "ru",
+    ttsVoices: { feminine: "ru-RU-SvetlanaNeural", masculine: "ru-RU-DmitryNeural" },
+  },
+  hi: {
+    code: "hi",
+    name: "Hindi",
+    nativeName: "हिन्दी",
+    flag: "🇮🇳",
+    greeting: "नमस्ते!",
+    goodbyes: "अलविदा, फिर मिलेंगे, बाय, टाटा, चलते हैं",
+    goodnight: "शुभ रात्रि",
+    fillers: "अरे, यानी, सच में, जैसे, बस, देखो",
+    emotionalExamples: "हाहाहा, सच में?!, वाह!, सीरियसली?, अरे वाह!",
+    whisperCode: "hi",
+    ttsVoices: { feminine: "hi-IN-SwaraNeural", masculine: "hi-IN-MadhurNeural" },
+  },
+  ar: {
+    code: "ar",
+    name: "Arabic",
+    nativeName: "العربية",
+    flag: "🇸🇦",
+    greeting: "مرحبا!",
+    goodbyes: "مع السلامة, وداعاً, إلى اللقاء, باي, نشوفك",
+    goodnight: "تصبح على خير",
+    fillers: "يعني, بس, شوف, تعرف, أصلاً, في الحقيقة",
+    emotionalExamples: "هههه, جداً؟!, رائع!, بجد؟, واو!",
+    whisperCode: "ar",
+    ttsVoices: { feminine: "ar-SA-ZariyahNeural", masculine: "ar-SA-HamedNeural" },
+  },
+  tr: {
+    code: "tr",
+    name: "Turkish",
+    nativeName: "Türkçe",
+    flag: "🇹🇷",
+    greeting: "Merhaba!",
+    goodbyes: "güle güle, hoşçakal, görüşürüz, bye bye, sonra görüşürüz",
+    goodnight: "iyi geceler",
+    fillers: "yani, işte, bak, biliyorsun, falan, aslında",
+    emotionalExamples: "haha, gerçekten mi?!, harika!, cidden?, vay!",
+    whisperCode: "tr",
+    ttsVoices: { feminine: "tr-TR-EmelNeural", masculine: "tr-TR-AhmetNeural" },
+  },
+  nl: {
+    code: "nl",
+    name: "Dutch",
+    nativeName: "Nederlands",
+    flag: "🇳🇱",
+    greeting: "Hallo!",
+    goodbyes: "doei, tot ziens, tot straks, dag, bye",
+    goodnight: "goedenacht",
+    fillers: "nou, dus, weet je, eigenlijk, zeg, hé",
+    emotionalExamples: "haha, echt?!, gaaf!, meen je dat?, wauw!",
+    whisperCode: "nl",
+    ttsVoices: { feminine: "nl-NL-FennaNeural", masculine: "nl-NL-MaartenNeural" },
+  },
+  sv: {
+    code: "sv",
+    name: "Swedish",
+    nativeName: "Svenska",
+    flag: "🇸🇪",
+    greeting: "Hej!",
+    goodbyes: "hejdå, vi ses, till nästa, ha det bra, bye",
+    goodnight: "godnatt",
+    fillers: "alltså, liksom, va, jo, faktiskt, vet du",
+    emotionalExamples: "haha, verkligen?!, coolt!, skojar du?, wow!",
+    whisperCode: "sv",
+    ttsVoices: { feminine: "sv-SE-SofieNeural", masculine: "sv-SE-MattiasNeural" },
+  },
+  nb: {
+    code: "nb",
+    name: "Norwegian",
+    nativeName: "Norsk",
+    flag: "🇳🇴",
+    greeting: "Hei!",
+    goodbyes: "ha det, adjø, vi ses, på gjensyn, bye",
+    goodnight: "god natt",
+    fillers: "altså, liksom, vet du, jo, egentlig, hør",
+    emotionalExamples: "haha, seriøst?!, kult!, mener du det?, wow!",
+    whisperCode: "no",
+    ttsVoices: { feminine: "nb-NO-PernilleNeural", masculine: "nb-NO-FinnNeural" },
+  },
+  da: {
+    code: "da",
+    name: "Danish",
+    nativeName: "Dansk",
+    flag: "🇩🇰",
+    greeting: "Hej!",
+    goodbyes: "hej hej, farvel, vi ses, på gensyn, bye",
+    goodnight: "god nat",
+    fillers: "altså, ligesom, ved du hvad, jo, faktisk, nå",
+    emotionalExamples: "haha, virkelig?!, fedt!, mener du det?, wow!",
+    whisperCode: "da",
+    ttsVoices: { feminine: "da-DK-ChristelNeural", masculine: "da-DK-JeppeNeural" },
+  },
+  fi: {
+    code: "fi",
+    name: "Finnish",
+    nativeName: "Suomi",
+    flag: "🇫🇮",
+    greeting: "Hei!",
+    goodbyes: "heippa, näkemiin, moikka, kuulemiin, bye",
+    goodnight: "hyvää yötä",
+    fillers: "no niin, siis, tiedätkö, öö, niinku, oikeasti",
+    emotionalExamples: "haha, oikeasti?!, siistiä!, tosissasi?, vau!",
+    whisperCode: "fi",
+    ttsVoices: { feminine: "fi-FI-NooraNeural", masculine: "fi-FI-HarriNeural" },
+  },
+  pl: {
+    code: "pl",
+    name: "Polish",
+    nativeName: "Polski",
+    flag: "🇵🇱",
+    greeting: "Cześć!",
+    goodbyes: "do widzenia, cześć, na razie, do zobaczenia, pa",
+    goodnight: "dobranoc",
+    fillers: "no, więc, wiesz, właśnie, jakby, tak naprawdę",
+    emotionalExamples: "haha, poważnie?!, świetnie!, serio?, wow!",
+    whisperCode: "pl",
+    ttsVoices: { feminine: "pl-PL-AgnieszkaNeural", masculine: "pl-PL-MarekNeural" },
+  },
+  el: {
+    code: "el",
+    name: "Greek",
+    nativeName: "Ελληνικά",
+    flag: "🇬🇷",
+    greeting: "Γεια σας!",
+    goodbyes: "αντίο, γεια, τα λέμε, εις το επανιδείν, bye",
+    goodnight: "καληνύχτα",
+    fillers: "λοιπόν, δηλαδή, ξέρεις, βλέπεις, στην πραγματικότητα",
+    emotionalExamples: "χαχαχα, σοβαρά;!, μπράβο!, αλήθεια;, ουάου!",
+    whisperCode: "el",
+    ttsVoices: { feminine: "el-GR-AthinaNeural", masculine: "el-GR-NestorasNeural" },
+  },
+  cs: {
+    code: "cs",
+    name: "Czech",
+    nativeName: "Čeština",
+    flag: "🇨🇿",
+    greeting: "Ahoj!",
+    goodbyes: "sbohem, ahoj, na shledanou, čau, bye",
+    goodnight: "dobrou noc",
+    fillers: "no, tedy, víš, vlastně, prostě, jo",
+    emotionalExamples: "haha, vážně?!, super!, fakt jo?, wow!",
+    whisperCode: "cs",
+    ttsVoices: { feminine: "cs-CZ-VlastaNeural", masculine: "cs-CZ-AntoninNeural" },
+  },
+  ro: {
+    code: "ro",
+    name: "Romanian",
+    nativeName: "Română",
+    flag: "🇷🇴",
+    greeting: "Bună!",
+    goodbyes: "la revedere, pa, pe curând, ne vedem, bye",
+    goodnight: "noapte bună",
+    fillers: "deci, adică, știi, uite, de fapt, bine",
+    emotionalExamples: "haha, serios?!, grozav!, chiar?, wow!",
+    whisperCode: "ro",
+    ttsVoices: { feminine: "ro-RO-AlinaNeural", masculine: "ro-RO-EmilNeural" },
+  },
+  hu: {
+    code: "hu",
+    name: "Hungarian",
+    nativeName: "Magyar",
+    flag: "🇭🇺",
+    greeting: "Szia!",
+    goodbyes: "viszlát, szia, viszontlátásra, cső, bye",
+    goodnight: "jó éjt",
+    fillers: "szóval, tehát, tudod, nézd, valójában, hát",
+    emotionalExamples: "haha, komolyan?!, remek!, tényleg?, wow!",
+    whisperCode: "hu",
+    ttsVoices: { feminine: "hu-HU-NoemiNeural", masculine: "hu-HU-TamasNeural" },
+  },
+  uk: {
+    code: "uk",
+    name: "Ukrainian",
+    nativeName: "Українська",
+    flag: "🇺🇦",
+    greeting: "Привіт!",
+    goodbyes: "до побачення, бувай, побачимось, пока, бай",
+    goodnight: "на добраніч",
+    fillers: "ну, от, знаєш, взагалі, типу, насправді",
+    emotionalExamples: "хаха, справді?!, чудово!, серйозно?, ого!",
+    whisperCode: "uk",
+    ttsVoices: { feminine: "uk-UA-PolinaNeural", masculine: "uk-UA-OstapNeural" },
+  },
+  vi: {
+    code: "vi",
+    name: "Vietnamese",
+    nativeName: "Tiếng Việt",
+    flag: "🇻🇳",
+    greeting: "Xin chào!",
+    goodbyes: "tạm biệt, bái bai, hẹn gặp lại, chào nhé, bye",
+    goodnight: "chúc ngủ ngon",
+    fillers: "ừ, thì, biết không, thật ra, kiểu, thế",
+    emotionalExamples: "haha, thật không?!, tuyệt!, nghiêm túc không?, ồ!",
+    whisperCode: "vi",
+    ttsVoices: { feminine: "vi-VN-HoaiMyNeural", masculine: "vi-VN-NamMinhNeural" },
+  },
+  id: {
+    code: "id",
+    name: "Indonesian",
+    nativeName: "Bahasa Indonesia",
+    flag: "🇮🇩",
+    greeting: "Halo!",
+    goodbyes: "selamat tinggal, sampai jumpa, dadah, bye, nanti ya",
+    goodnight: "selamat malam",
+    fillers: "jadi, tuh, tau nggak, kayak, emang, sebenarnya",
+    emotionalExamples: "haha, serius?!, keren!, beneran?, wow!",
+    whisperCode: "id",
+    ttsVoices: { feminine: "id-ID-GadisNeural", masculine: "id-ID-ArdiNeural" },
+  },
+  he: {
+    code: "he",
+    name: "Hebrew",
+    nativeName: "עברית",
+    flag: "🇮🇱",
+    greeting: "שלום!",
+    goodbyes: "להתראות, שלום, ביי, נתראה, יאללה ביי",
+    goodnight: "לילה טוב",
+    fillers: "אז, יעני, תשמע, בעצם, כאילו, ממש",
+    emotionalExamples: "חחח, ברצינות?!, מגניב!, סיריוסלי?, וואו!",
+    whisperCode: "he",
+    ttsVoices: { feminine: "he-IL-HilaNeural", masculine: "he-IL-AvriNeural" },
+  },
+  ga: {
+    code: "ga",
+    name: "Irish",
+    nativeName: "Gaeilge",
+    flag: "🇮🇪",
+    greeting: "Dia duit!",
+    goodbyes: "slán, slán leat, feicfidh mé thú, go n-éirí leat, bye",
+    goodnight: "oíche mhaith",
+    fillers: "bhuel, mar sin, tá a fhios agat, féach, i ndáiríre",
+    emotionalExamples: "haha, an dáiríre?!, iontach!, go fírinneach?, wow!",
+    whisperCode: "ga",
+    ttsVoices: { feminine: "ga-IE-OrlaNeural", masculine: "ga-IE-ColmNeural" },
+  },
+  cy: {
+    code: "cy",
+    name: "Welsh",
+    nativeName: "Cymraeg",
+    flag: "🏴\u200D󠁷󠁬󠁳󠁿",
+    greeting: "Helo!",
+    goodbyes: "hwyl fawr, hwyl, tan tro nesaf, wela i ti, bye",
+    goodnight: "nos da",
+    fillers: "wel, felly, ti'n gwybod, edrych, mewn gwirionedd",
+    emotionalExamples: "haha, wir?!, gwych!, go iawn?, wow!",
+    whisperCode: "cy",
+    ttsVoices: { feminine: "cy-GB-NiaNeural", masculine: "cy-GB-AledNeural" },
+  },
+  hw: {
+    code: "hw",
+    name: "Hawaiian",
+    nativeName: "ʻŌlelo Hawaiʻi",
+    flag: "🌺",
+    greeting: "Aloha!",
+    goodbyes: "aloha, a hui hou, a hui hou kākou, mahalo, bye",
+    goodnight: "aloha ahiahi",
+    fillers: "ʻae, nō, ʻo ia, a laila, no laila",
+    emotionalExamples: "haha, ʻoiaʻiʻo?!, maikaʻi!, wow!",
+    whisperCode: "haw",
+    ttsVoices: { feminine: "en-US-JennyNeural", masculine: "en-US-GuyNeural" },
+  },
+  ht: {
+    code: "ht",
+    name: "Haitian Creole",
+    nativeName: "Kreyòl ayisyen",
+    flag: "🇭🇹",
+    greeting: "Bonjou!",
+    goodbyes: "orevwa, babay, n'ap wè, à pita, bye",
+    goodnight: "bònn nwit",
+    fillers: "bon, alò, ou konnen, gade, an reyalite",
+    emotionalExamples: "haha, vrèman?!, super!, seryezman?, wow!",
+    whisperCode: "ht",
+    ttsVoices: { feminine: "fr-FR-DeniseNeural", masculine: "fr-FR-HenriNeural" },
+  },
+  sw: {
+    code: "sw",
+    name: "Swahili",
+    nativeName: "Kiswahili",
+    flag: "🇰🇪",
+    greeting: "Habari!",
+    goodbyes: "kwaheri, baadaye, tutaonana, lala salama, bye",
+    goodnight: "lala salama",
+    fillers: "sawa, basi, unajua, angalia, kweli, hasa",
+    emotionalExamples: "haha, kweli?!, vizuri!, hakika?, wow!",
+    whisperCode: "sw",
+    ttsVoices: { feminine: "sw-KE-ZuriNeural", masculine: "sw-KE-RafikiNeural" },
+  },
+  yi: {
+    code: "yi",
+    name: "Yiddish",
+    nativeName: "ייִדיש",
+    flag: "✡️",
+    greeting: "שלום!",
+    goodbyes: "אַ גוטן, זײַ געזונט, ביז מאָרגן, bye",
+    goodnight: "אַ גוטע נאַכט",
+    fillers: "נו, אַזוי, וויסטו, קוק, אמת, ממש",
+    emotionalExamples: "haha, ווירקלעך?!, אויסגעצייכנט!, ערנסט?, וואָוו!",
+    whisperCode: "yi",
+    ttsVoices: { feminine: "he-IL-HilaNeural", masculine: "he-IL-AvriNeural" },
+  },
+  gd: {
+    code: "gd",
+    name: "Scottish Gaelic",
+    nativeName: "Gàidhlig",
+    flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+    greeting: "Hàlo!",
+    goodbyes: "beannachd leat, mar sin leat, tìoraidh, bye, slàn",
+    goodnight: "oidhche mhath",
+    fillers: "uill, mar sin, tha fios agad, seall, gu dearbh",
+    emotionalExamples: "haha, da-rìribh?!, sgoinneil!, cinnteach?, wow!",
+    whisperCode: "gd",
+    ttsVoices: { feminine: "en-GB-LibbyNeural", masculine: "en-GB-RyanNeural" },
+  },
+  ca: {
+    code: "ca",
+    name: "Catalan",
+    nativeName: "Català",
+    flag: "🏳️",
+    greeting: "Hola!",
+    goodbyes: "adéu, fins aviat, a reveure, fins ara, bye",
+    goodnight: "bona nit",
+    fillers: "bé, doncs, saps, mira, en realitat, o sigui",
+    emotionalExamples: "haha, de debò?!, genial!, seriosament?, ostres!",
+    whisperCode: "ca",
+    ttsVoices: { feminine: "ca-ES-JoanaNeural", masculine: "ca-ES-EnricNeural" },
+  },
+  eo: {
+    code: "eo",
+    name: "Esperanto",
+    nativeName: "Esperanto",
+    flag: "🌍",
+    greeting: "Saluton!",
+    goodbyes: "ĝis, ĝis revido, adiaŭ, ĝis baldaŭ, bye",
+    goodnight: "bonan nokton",
+    fillers: "nu, do, scias, rigardu, vere, cetere",
+    emotionalExamples: "haha, vere?!, bonega!, ĉu vere?, vau!",
+    whisperCode: "eo",
+    ttsVoices: { feminine: "it-IT-ElsaNeural", masculine: "it-IT-DiegoNeural" },
+  },
+  la: {
+    code: "la",
+    name: "Latin",
+    nativeName: "Latina",
+    flag: "🏛️",
+    greeting: "Salve!",
+    goodbyes: "vale, valete, in posterum, bene vale, bye",
+    goodnight: "bona nox",
+    fillers: "ergo, igitur, scis, ecce, re vera, atque",
+    emotionalExamples: "haha, vere?!, optime!, mehercule!, euge!",
+    whisperCode: "la",
+    ttsVoices: { feminine: "it-IT-ElsaNeural", masculine: "it-IT-DiegoNeural" },
+  },
+  zu: {
+    code: "zu",
+    name: "Zulu",
+    nativeName: "isiZulu",
+    flag: "🇿🇦",
+    greeting: "Sawubona!",
+    goodbyes: "sala kahle, hamba kahle, sizobonana, bye, totsiens",
+    goodnight: "ulale kahle",
+    fillers: "yebo, hawu, uyazi, bheka, kuyiqiniso, phela",
+    emotionalExamples: "haha, ngempela?!, kuhle!, wow!",
+    whisperCode: "zu",
+    ttsVoices: { feminine: "en-ZA-LeahNeural", masculine: "en-ZA-LukeNeural" },
+  },
+  nv: {
+    code: "nv",
+    name: "Navajo",
+    nativeName: "Diné bizaad",
+    flag: "🪶",
+    greeting: "Yá'át'ééh!",
+    goodbyes: "hágoónee', nízhónígo naninááh, bye",
+    goodnight: "nizhóní yiskąągo",
+    fillers: "aoo', éí, biiniinaa, díí, hait'éego",
+    emotionalExamples: "haha, ndi éí?!, nizhóní!, wow!",
+    whisperCode: "nv",
+    ttsVoices: { feminine: "en-US-JennyNeural", masculine: "en-US-GuyNeural" },
+  },
+};
+
+export const LANGUAGE_LIST: LanguageConfig[] = Object.values(LANGUAGES).sort((a, b) =>
+  a.name.localeCompare(b.name)
+);
+
+export function getLanguage(code: TargetLanguage): LanguageConfig {
+  return LANGUAGES[code];
+}
+
+export function getGenericVocabularyLevel(level: ComplexityLevel, langName: string): string {
+  const templates: Record<ComplexityLevel, string> = {
+    1: `VOCABULARY GUARDRAILS (Level 1 — First Words):
+Max 4 words per sentence.
+Use only the most basic greetings and courtesy words in ${langName}: hello, yes, no, thank you, please, goodbye, good, bad.
+Avoid all verbs, nouns, numbers, tenses. Simplify everything to the absolute minimum.`,
+
+    2: `VOCABULARY GUARDRAILS (Level 2 — Introductions):
+Max 5 words per sentence.
+Add: basic self-introduction phrases ("my name is"), polite acknowledgments.
+Avoid conjugated verbs beyond "my name is", nouns, numbers.`,
+
+    3: `VOCABULARY GUARDRAILS (Level 3 — Basic Questions):
+Max 6 words per sentence. Simple question words now allowed (what, how, where).
+Add: basic question words, simple "to be" conjugations, numbers 1-3.
+Avoid: unlisted verbs, past tense, most nouns.`,
+
+    4: `VOCABULARY GUARDRAILS (Level 4 — Wants & Likes):
+Max 6 words per sentence.
+Add: "I have/want", "I like/you like", numbers up to 10, basic nouns.
+Avoid: past tense, complex structures.`,
+
+    5: `VOCABULARY GUARDRAILS (Level 5 — Daily Life):
+Max 7 words per sentence. Present tense only.
+Add: basic everyday verbs (speak, eat, live, work, study, go), common nouns (friend, family, house, food, water, coffee, work, school), simple adjectives (good, bad, big, small), time words (today, now), basic connectors (but, and, or, with).
+Avoid: all past tense, subjunctive, conditional.`,
+
+    6: `VOCABULARY GUARDRAILS (Level 6 — Past & Travel):
+Max 10 words per sentence. Past tense is now unlocked!
+Add: simple past forms, travel vocabulary (hotel, airport, bus, street, beach, trip, passport), food/restaurant vocabulary (restaurant, menu, meat, chicken, rice, bread, beer, wine, bill), descriptive words (pretty, expensive, cheap, far, near, hot, cold).
+Avoid: imperfect tense, subjunctive, conditional.`,
+
+    7: `VOCABULARY GUARDRAILS (Level 7 — Feelings & Opinions):
+Max 12 words per sentence.
+Add: imperfect past, emotion vocabulary (happy, sad, angry, nervous, tired, excited, worried), opinion phrases (I think, I believe, in my opinion), comparatives (more/less than, better, worse), connectors (because, when, if, then, also).
+Avoid: conditional tense, subjunctive.`,
+
+    8: `VOCABULARY GUARDRAILS (Level 8 — Complex Conversation):
+Max 15 words per sentence.
+Add: conditional tense, future forms, hypotheticals (if...then), abstract nouns (problem, solution, opportunity, experience, difference, situation), discourse markers (however, on the other hand, in fact, for example).
+Avoid: full subjunctive, highly formal/literary register.`,
+
+    9: `VOCABULARY GUARDRAILS (Level 9 — Advanced Expression):
+Nearly unrestricted. Full subjunctive or equivalent, formal registers, persuasion, cultural topics, idiomatic expressions. No strict sentence length limit.`,
+
+    10: `VOCABULARY GUARDRAILS (Level 10 — Native-like):
+No restrictions. Speak naturally — idioms, slang, cultural references, humor, regional expressions. Talk like you would with a friend.`,
+  };
+  return templates[level];
+}

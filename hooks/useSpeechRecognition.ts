@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 
-type TargetLanguage = "es" | "pt";
+import type { TargetLanguage } from "@/lib/languages";
 
 const SILENCE_THRESHOLD = 10; // RMS below this = silence
 const SILENCE_DURATION_MS = 2000; // stop after 2s of silence

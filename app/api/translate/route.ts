@@ -15,11 +15,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const langNames: Record<string, string> = {
-      en: "English",
-      es: "Spanish",
-      pt: "Portuguese",
-    };
+    const { LANGUAGES } = await import("@/lib/languages");
+    const langName = LANGUAGES[targetLang as keyof typeof LANGUAGES]?.name ?? "English";
 
     const response = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
@@ -27,7 +24,7 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `You are a translator. Translate the following text to ${langNames[targetLang] || "English"}. Only output the translation, nothing else. Do not add quotes or explanations.`,
+          content: `You are a translator. Translate the following text to ${langName}. Only output the translation, nothing else. Do not add quotes or explanations.`,
         },
         {
           role: "user",

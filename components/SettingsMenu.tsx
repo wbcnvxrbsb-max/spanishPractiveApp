@@ -2,7 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { signOut } from "next-auth/react";
-import { ComplexityLevel, WordCount, TargetLanguage } from "@/lib/prompts";
+import { ComplexityLevel, WordCount } from "@/lib/prompts";
+import { LANGUAGE_LIST } from "@/lib/languages";
+import type { TargetLanguage } from "@/lib/languages";
 import { Language, t } from "@/lib/translations";
 
 interface SettingsMenuProps {
@@ -91,27 +93,20 @@ export default function SettingsMenu({
             <label className="text-xs font-medium text-gray-600 block mb-2">
               🌍 {t("learning", lang)}
             </label>
-            <div className="flex gap-1">
-              <button
-                onClick={() => onTargetLangChange("es")}
-                className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                  targetLang === "es"
-                    ? "bg-green-500 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                🇪🇸 {lang === "pt" ? "Espanhol" : lang === "es" ? "Español" : "Spanish"}
-              </button>
-              <button
-                onClick={() => onTargetLangChange("pt")}
-                className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                  targetLang === "pt"
-                    ? "bg-green-500 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                🇧🇷 {lang === "pt" ? "Português" : lang === "es" ? "Portugués" : "Portuguese"}
-              </button>
+            <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md">
+              {LANGUAGE_LIST.map((language) => (
+                <button
+                  key={language.code}
+                  onClick={() => onTargetLangChange(language.code)}
+                  className={`w-full text-left px-3 py-1.5 text-xs font-medium transition-colors ${
+                    targetLang === language.code
+                      ? "bg-green-500 text-white"
+                      : "hover:bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  {language.flag} {language.name}
+                </button>
+              ))}
             </div>
           </div>
 

@@ -9,14 +9,15 @@ export const metadata: Metadata = {
     template: "%s | Practica",
   },
   description:
-    "Practice Spanish and Portuguese through natural AI conversation. 10 levels, 6 real-world scenarios, voice recognition, and instant grammar correction.",
+    "Practice 38+ languages through natural AI conversation. 10 levels, 6 real-world scenarios, voice recognition, and instant grammar correction.",
   keywords: [
-    "Spanish practice",
-    "Portuguese practice",
+    "language practice",
     "AI language tutor",
     "conversation practice",
     "learn Spanish",
-    "learn Portuguese",
+    "learn French",
+    "learn Japanese",
+    "learn Korean",
   ],
   openGraph: {
     type: "website",

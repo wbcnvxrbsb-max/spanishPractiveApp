@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 
-type TargetLanguage = "es" | "pt";
+import type { TargetLanguage } from "@/lib/languages";
 type Voice = "feminine" | "masculine";
 
 let globalVoiceIndex = 0;

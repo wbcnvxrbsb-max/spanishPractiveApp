@@ -8,7 +8,9 @@ export type Scenario =
 
 export type ComplexityLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export type WordCount = "short" | "medium" | "long";
-export type TargetLanguage = "es" | "pt";
+import { getLanguage, getGenericVocabularyLevel } from "./languages";
+export type { TargetLanguage } from "./languages";
+import type { TargetLanguage } from "./languages";
 
 export const scenarios: { id: Scenario; name: string; description: string }[] = [
   {
@@ -184,19 +186,17 @@ const wordCountInstructions: Record<WordCount, string> = {
 };
 
 const getBaseInstructions = (level: ComplexityLevel, wordCount: WordCount, targetLang: TargetLanguage) => {
-  const vocabularyLevels = targetLang === "pt" ? portugueseVocabularyLevels : spanishVocabularyLevels;
-  const langName = targetLang === "pt" ? "Portuguese" : "Spanish";
-  const goodbyes = targetLang === "pt"
-    ? "tchau, até logo, até mais, adeus, nos vemos"
-    : "adiós, hasta luego, hasta pronto, chao, nos vemos";
-  const goodnight = targetLang === "pt" ? "boa noite" : "buenas noches";
-
-  const fillers = targetLang === "pt"
-    ? "bom, então, olha, sabe, tipo, nossa, é mesmo?"
-    : "bueno, pues, mira, oye, a ver, vale, ¿sabes?";
-  const emotionalExamples = targetLang === "pt"
-    ? "kkk/haha, sério?!, que legal!, nossa!, poxa..."
-    : "jaja, ¡no me digas!, ¡qué bien!, ¿en serio?, ¡uy!";
+  const langConfig = getLanguage(targetLang);
+  const vocabBlock = targetLang === "es"
+    ? spanishVocabularyLevels[level]
+    : targetLang === "pt"
+    ? portugueseVocabularyLevels[level]
+    : getGenericVocabularyLevel(level, langConfig.name);
+  const langName = langConfig.name;
+  const goodbyes = langConfig.goodbyes;
+  const goodnight = langConfig.goodnight;
+  const fillers = langConfig.fillers;
+  const emotionalExamples = langConfig.emotionalExamples;
 
   const beginnerNote = level <= 5
     ? `\nIMPORTANT: The user is a beginner (Level ${level}). The vocabulary guardrails below are mandatory — stay strictly within the allowed words. Simplify your character if needed to stay within vocabulary.`
@@ -215,7 +215,7 @@ HOW TO TALK:
 - ${wordCountInstructions[wordCount]}
 ${beginnerNote}
 
-${vocabularyLevels[level]}
+${vocabBlock}
 
 Respond ONLY in ${langName}.
 
@@ -325,7 +325,6 @@ export function getSystemPrompt(
   targetLang: TargetLanguage = "es",
   preSelectedVariation?: string
 ): string {
-  const langName = targetLang === "pt" ? "Portuguese" : "Spanish";
   const baseInstructions = getBaseInstructions(level, wordCount, targetLang);
   const variation = preSelectedVariation || getRandomElement(scenarioVariations[scenario]);
   return `${baseInstructions}\n\nYOUR CHARACTER:\n${variation}`;

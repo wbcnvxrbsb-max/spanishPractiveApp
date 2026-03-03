@@ -1,17 +1,6 @@
 import { NextResponse } from "next/server";
 import { EdgeTTS, Constants } from "@andresaya/edge-tts";
-
-// Voice mapping for each language and gender
-const VOICES: Record<string, Record<string, string>> = {
-  es: {
-    feminine: "es-MX-DaliaNeural",
-    masculine: "es-MX-JorgeNeural",
-  },
-  pt: {
-    feminine: "pt-BR-FranciscaNeural",
-    masculine: "pt-BR-AntonioNeural",
-  },
-};
+import { getLanguage } from "@/lib/languages";
 
 export async function POST(request: Request) {
   try {
@@ -24,8 +13,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const lang = targetLang === "pt" ? "pt" : "es";
-    const voiceName = VOICES[lang][voice] || VOICES[lang].feminine;
+    const langConfig = getLanguage(targetLang);
+    const voiceName = langConfig?.ttsVoices[voice as "feminine" | "masculine"]
+      ?? langConfig?.ttsVoices.feminine
+      ?? "es-MX-DaliaNeural";
 
     // Convert speed (0.5-1.5) to Edge-TTS rate percentage (-50% to +50%)
     const ratePercent = Math.round((speed - 1) * 100);

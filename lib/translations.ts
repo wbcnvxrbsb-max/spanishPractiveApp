@@ -1,12 +1,10 @@
 export type Language = "es" | "en" | "pt";
-export type TargetLanguage = "es" | "pt";
 
 export const translations = {
   es: {
     // Header
-    title: "Practica Español",
-    titlePt: "Practica Portugués",
-    subtitle: "Tu tutor de español con IA",
+    title: "Practica Idiomas",
+    subtitle: "Tu tutor de idiomas con IA",
 
     // Scenario selector
     scenario: "Escenario",
@@ -34,8 +32,7 @@ export const translations = {
 
     // Welcome screen
     welcome: "¡Bienvenido!",
-    welcomeText: "Practica tu español con conversaciones naturales.",
-    welcomeTextPt: "Practica tu portugués con conversaciones naturales.",
+    welcomeText: "Practica con conversaciones naturales.",
     adjustLevel: "Ajusta el nivel de dificultad arriba antes de comenzar.",
     startConversation: "Comenzar Conversación",
 
@@ -91,9 +88,8 @@ export const translations = {
   },
   en: {
     // Header
-    title: "Practice Spanish",
-    titlePt: "Practice Portuguese",
-    subtitle: "Your AI Spanish tutor",
+    title: "Language Practice",
+    subtitle: "Your AI language tutor",
 
     // Scenario selector
     scenario: "Scenario",
@@ -121,8 +117,7 @@ export const translations = {
 
     // Welcome screen
     welcome: "Welcome!",
-    welcomeText: "Practice your Spanish with natural conversations.",
-    welcomeTextPt: "Practice your Portuguese with natural conversations.",
+    welcomeText: "Practice with natural conversations.",
     adjustLevel: "Adjust the difficulty level above before starting.",
     startConversation: "Start Conversation",
 
@@ -178,8 +173,7 @@ export const translations = {
   },
   pt: {
     // Header
-    title: "Pratique Espanhol",
-    titlePt: "Pratique Português",
+    title: "Pratique Idiomas",
     subtitle: "Seu tutor de idiomas com IA",
 
     // Scenario selector
@@ -208,8 +202,7 @@ export const translations = {
 
     // Welcome screen
     welcome: "Bem-vindo!",
-    welcomeText: "Pratique seu espanhol com conversas naturais.",
-    welcomeTextPt: "Pratique seu português com conversas naturais.",
+    welcomeText: "Pratique com conversas naturais.",
     adjustLevel: "Ajuste o nível de dificuldade acima antes de começar.",
     startConversation: "Começar Conversa",
 

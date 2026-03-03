@@ -2,13 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Practica - AI Spanish & Portuguese Conversation Practice",
+  title: "Practica - AI Language Conversation Practice | 38+ Languages",
   description:
-    "Improve your Spanish and Portuguese fluency through natural AI conversations. Practice real scenarios like restaurants, travel, and making friends. 10 difficulty levels, voice recognition, and instant grammar correction.",
+    "Practice Spanish, French, Japanese, Korean, and 34 more languages through natural AI conversations. Real scenarios, 10 difficulty levels, voice recognition, and instant grammar correction.",
   openGraph: {
-    title: "Practica - AI Spanish & Portuguese Conversation Practice",
+    title: "Practica - AI Language Conversation Practice | 38+ Languages",
     description:
-      "Natural AI-powered conversations to build real language fluency. 10 difficulty levels, 6 real-world scenarios, voice recognition.",
+      "Natural AI-powered conversations to build real language fluency. 38+ languages, 10 difficulty levels, 6 real-world scenarios, voice recognition.",
     url: "https://practice-languages.onrender.com",
     siteName: "Practica",
     type: "website",
@@ -49,11 +49,11 @@ export default function LandingPage() {
       <section className="px-4 sm:px-6 pt-16 pb-12 text-center">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            Practice Spanish & Portuguese Through Real Conversation
+            Practice 38+ Languages Through Real Conversation
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Have natural conversations with an AI tutor that adapts to your
-            level. From your first words to fluent discussion — practice
+            level. Spanish, French, Japanese, Korean, and 34 more languages — practice
             speaking in real-world scenarios, get instant grammar corrections,
             and build confidence at your own pace.
           </p>
@@ -141,14 +141,15 @@ export default function LandingPage() {
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <div className="text-3xl mb-3">🤖</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                AI That Adapts to You
+                38+ Languages
               </h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Powered by advanced language models, your conversation partner
-                adapts vocabulary and sentence complexity to match your chosen
-                level. It responds naturally, asks follow-up questions, and
-                keeps the dialogue engaging — creating an experience that feels
-                like chatting with a patient native speaker.
+                Practice Spanish, French, German, Japanese, Korean, Chinese,
+                Arabic, Hindi, and 30 more languages. Powered by advanced
+                language models, your conversation partner adapts vocabulary
+                and complexity to match your chosen level — creating an
+                experience that feels like chatting with a patient native
+                speaker in any language.
               </p>
             </div>
           </div>
@@ -235,19 +236,9 @@ export default function LandingPage() {
       <section className="px-4 sm:px-6 py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
-            Why Practice Conversational Spanish?
+            Why Practice Through Conversation?
           </h2>
           <div className="prose prose-gray max-w-none text-gray-600 space-y-4">
-            <p>
-              Spanish is the second most spoken native language in the world,
-              with over 500 million native speakers across more than 20
-              countries. It is the official language of Spain, Mexico, Colombia,
-              Argentina, and much of Central and South America. Whether you are
-              planning a trip to Barcelona, doing business in Mexico City, or
-              simply want to connect with Spanish-speaking friends and neighbors,
-              conversational ability opens doors that vocabulary lists alone
-              cannot.
-            </p>
             <p>
               Most language learners hit a plateau between textbook knowledge and
               real conversation. You might know hundreds of words and understand
@@ -258,11 +249,12 @@ export default function LandingPage() {
               words under pressure and form sentences in real time.
             </p>
             <p>
-              Portuguese, spoken by over 250 million people worldwide, shares
-              much of its vocabulary and grammar with Spanish. If you already
-              speak some Spanish, Portuguese becomes significantly easier to
-              learn. Practica supports both languages so you can build on your
-              existing skills or start fresh with either one.
+              Practica supports 38 languages — from widely spoken ones like
+              Spanish, French, German, Japanese, Korean, and Chinese to less
+              common ones like Welsh, Swahili, Navajo, and Esperanto. Whether
+              you are preparing for a trip abroad, connecting with family
+              heritage, or simply curious about a new language, you can start
+              practicing immediately at any level.
             </p>
             <p>
               Research consistently shows that active practice — speaking and
@@ -270,6 +262,13 @@ export default function LandingPage() {
               way to build lasting fluency. Practica gives you a patient,
               always-available conversation partner that meets you at your
               current level and helps you improve with every exchange.
+            </p>
+            <p>
+              Each conversation uses real-world scenarios with different
+              characters and situations, so every practice session feels fresh.
+              Combined with instant grammar correction and voice recognition,
+              you get a complete practice environment that adapts to you — no
+              matter which language you choose.
             </p>
           </div>
         </div>
@@ -328,12 +327,15 @@ export default function LandingPage() {
             </div>
             <div>
               <h3 className="font-semibold text-gray-900 mb-1">
-                Can I practice Portuguese too?
+                Which languages are supported?
               </h3>
               <p className="text-gray-600 text-sm">
-                Yes. You can switch between Spanish and Brazilian Portuguese in
-                the settings. All scenarios and difficulty levels are available
-                in both languages.
+                Practica supports 38 languages including Spanish, French,
+                German, Italian, Portuguese, Japanese, Korean, Chinese,
+                Russian, Hindi, Arabic, Turkish, Dutch, Swedish, Norwegian,
+                Danish, Finnish, Polish, Greek, Czech, Romanian, Hungarian,
+                Ukrainian, Vietnamese, Indonesian, Hebrew, Irish, Welsh, and
+                more. You can switch languages anytime in the settings.
               </p>
             </div>
           </div>
